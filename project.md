@@ -31,7 +31,7 @@
       Describe how you train your models
       Describe how you evaluate your models/ which metrics you use
 
-5. Results
+4. Results
    
    Describe what artifacts you have build
    Describe the libraries and tools you use
@@ -39,7 +39,7 @@
    Describe the results you achieve by applying your trained models on unseen data
    Descriptive Language (no judgement, no discussion in this section -> just show what you built)
    
-7. Discussion
+5. Discussion
    
    Now its time to discuss your results/ artifacts/ app
    Show the limitations : e.g. missing data, limited training ressources/ GPU availability in Colab, limitaitons of the app
@@ -51,6 +51,6 @@
    publications
    Further Research: What could be next steps for other researchers (specific research questions)
    
-9. Conclusion
+6. Conclusion
     
    Short summary of your findings and outlook
