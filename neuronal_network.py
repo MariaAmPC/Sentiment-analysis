@@ -1,17 +1,40 @@
 import numpy as np
 import pandas as pd
+import pathlib
+import requests
+from io import BytesIO
 
 #Größe des Netzwerkes festlegen
-gr_in=5
-gr_l1=10
-gr_l2=10
-gr_l3=10
-gr_out=2
+gr_in=784
+gr_l1=30
+gr_l2=30
+gr_l3=30
+gr_out=10
+
+
+#Einlesen von anderem Datensatz, nur zum testen des NN. Wird danach wieder gelöscht
+def get_mnist():
+    url = "https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/mnist.npz"
+    response = requests.get(url)
+    content = BytesIO(response.content)
+    # Die Datei öffnen
+    with np.load(content) as f:
+        # Daten aus der Datei laden
+        images, labels = f["x_train"], f["y_train"]
+    images = images.astype("float32") / 255
+    images = np.reshape(images, (images.shape[0], images.shape[1] * images.shape[2]))
+    labels = np.eye(10)[labels]
+    return images, labels
+
+images,imlabels=get_mnist()
+images=images[:50]
+imlabels=imlabels[:50]
 
 #Daten einlesen
 url_test =("https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/Testing_meme_dataset.csv")
 url_train=("https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/Training_meme_dataset.csv")
 url_validation=("https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/Validation_meme_dataset.csv")
+
 
 df_test= pd.read_csv(url_test,index_col=0)
 df_train= pd.read_csv(url_train,index_col=0)
@@ -23,6 +46,7 @@ def sigmoid(value):
 def forward(bias, layer, x): 
     pre= bias+ layer @ x
     return(sigmoid(pre))
+    
 
 """
 
@@ -41,7 +65,6 @@ for i in df_train.head(5)['sentence'].values:
 sentences=np.empty((0,5))
 for i in df_train.head(50)['sentence'].values:
     sentences = np.insert(sentences, len(sentences), np.array([[ord(i[0]),ord(i[1]),ord(i[2]),ord(i[3]),ord(i[4])]]),axis=0)
-print(sentences)
 
   
 #Labels einlesen
@@ -55,7 +78,6 @@ for i in df_train.head(50)['label'].values:
         print("ERROR")
     labels = np.insert(labels, len(labels), newrow, axis=0)
 
-print(labels)
 #Gewichte der Neuronenverbindugnen zufällig festlegen
 w_i_l1 = np.random.uniform(-0.5,0.5,(gr_l1,gr_in))
 w_l1_l2 = np.random.uniform(-0.5,0.5,(gr_l2,gr_l1))
@@ -69,16 +91,16 @@ b_l1_l2 = np.zeros((gr_l2,1))
 b_l2_l3 = np.zeros((gr_l3,1))
 b_l3_o = np.zeros((gr_out,1))
 
-count = 10 #Anzahl der Durchläufe
+count = 20 #Anzahl der Durchläufe
 correct = 0 #Anzahl korrekten Ergebnisse
 learnrate = .01
 
 for counter in range(count):
-    for sentence,label in zip(sentences,labels):
+    for sentence,label in zip(images,imlabels):
 
         sentence.shape+=(1,)
         label.shape+=(1,)
-        #print(sentence)
+        print(sentence)
         #print(label)
 
         #foreward propagation
