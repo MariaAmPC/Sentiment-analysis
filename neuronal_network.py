@@ -17,11 +17,32 @@ df_test= pd.read_csv(url_test,index_col=0)
 df_train= pd.read_csv(url_train,index_col=0)
 df_validation= pd.read_csv(url_validation,index_col=0)
 
+def sigmoid(value): 
+    return 1/ (1 + np.exp(-value))
+
+def forward(bias, layer, x): 
+    pre= bias+ layer @ x
+    return(sigmoid(pre))
+
+"""
+
+# Alternatives Sätze einlesen für alle Zeichen im satz 
+# Ergebnis ist ein Array von einem Arrys welche den UTF-8 code pro Zeichen haben
+sentences=[]
+for i in df_train.head(5)['sentence'].values:
+    sec=[]
+    for n in i: 
+        sec.append(ord(n))
+    sentences.append(sec)
+
+"""
+
 #Sätze einlesen
 sentences=np.empty((0,5))
 for i in df_train.head(50)['sentence'].values:
     sentences = np.insert(sentences, len(sentences), np.array([[ord(i[0]),ord(i[1]),ord(i[2]),ord(i[3]),ord(i[4])]]),axis=0)
 print(sentences)
+
   
 #Labels einlesen
 labels=np.empty((0,2))
@@ -40,6 +61,7 @@ w_i_l1 = np.random.uniform(-0.5,0.5,(gr_l1,gr_in))
 w_l1_l2 = np.random.uniform(-0.5,0.5,(gr_l2,gr_l1))
 w_l2_l3 = np.random.uniform(-0.5,0.5,(gr_l3,gr_l2))
 w_l3_o = np.random.uniform(-0.5,0.5,(gr_out,gr_l3))
+
 
 #Gewichte der Biases auf 0 setzen
 b_i_l1 = np.zeros((gr_l1,1))
@@ -60,17 +82,10 @@ for counter in range(count):
         #print(label)
 
         #foreward propagation
-        l1_pre = b_i_l1 + w_i_l1 @ sentence
-        l1 = 1/ (1 + np.exp(-l1_pre))
-
-        l2_pre = b_l1_l2 + w_l1_l2 @ l1
-        l2 = 1/ (1 + np.exp(-l2_pre))
-
-        l3_pre = b_l2_l3 + w_l2_l3 @ l2
-        l3 = 1/ (1 + np.exp(-l3_pre))
-        
-        out_pre = b_l3_o + w_l3_o @ l3
-        out = 1/ (1 + np.exp(-out_pre))
+        l1 = forward(b_i_l1, w_i_l1, sentence)
+        l2 = forward(b_l1_l2, w_l1_l2, l1)
+        l3 = forward(b_l2_l3, w_l2_l3, l2)
+        out = forward(b_l3_o, w_l3_o, l3)
     
         #print(out)
 
