@@ -43,8 +43,8 @@ df_validation= pd.read_csv(url_validation,index_col=0)
 def sigmoid(value): 
     return 1/ (1 + np.exp(-value))
 
-def forward(bias, layer, x): 
-    pre= bias+ layer @ x
+def forward(bias, weight, x): 
+    pre= bias+ weight @ x
     return(sigmoid(pre))
     
 
@@ -91,16 +91,16 @@ b_l1_l2 = np.zeros((gr_l2,1))
 b_l2_l3 = np.zeros((gr_l3,1))
 b_l3_o = np.zeros((gr_out,1))
 
-count = 20 #Anzahl der Durchläufe
+count = 10 #Anzahl der Durchläufe
 correct = 0 #Anzahl korrekten Ergebnisse
-learnrate = .01
+learnrate = 0.01
 
 for counter in range(count):
     for sentence,label in zip(images,imlabels):
 
         sentence.shape+=(1,)
         label.shape+=(1,)
-        print(sentence)
+        #print(sentence)
         #print(label)
 
         #foreward propagation
@@ -121,20 +121,24 @@ for counter in range(count):
         w_l3_o += -learnrate* delta_out @ np.transpose(l3)
         b_l3_o += -learnrate* delta_out
 
-        delta_l3 = np.transpose(w_l3_o) @ delta_out * (l3*(l3-1))
+        delta_l3 = np.transpose(w_l3_o) @ delta_out * (l3*(1-l3))
         w_l2_l3 += -learnrate* delta_l3 @ np.transpose(l2)
         b_l2_l3 += -learnrate* delta_l3
 
-        delta_l2 = np.transpose(w_l2_l3) @ delta_l3 * (l2*(l2-1))
+        delta_l2 = np.transpose(w_l2_l3) @ delta_l3 * (l2*(1-l2))
         w_l1_l2 += -learnrate* delta_l2 @ np.transpose(l1)
         b_l1_l2 += -learnrate* delta_l2
 
-        delta_l1 = np.transpose(w_l1_l2) @ delta_l2 * (l1*(l1-1))
+        delta_l1 = np.transpose(w_l1_l2) @ delta_l2 * (l1*(1-l1))
         w_i_l1 += -learnrate* delta_l1 @ np.transpose(sentence)
         b_i_l1 += -learnrate* delta_l1
 
+        print(label)
+        print(print(out))
+        print(int(np.argmax(out) == np.argmax(label)))
+
     #Ausgeben der Genauigkeit nach jeder Iteration    
-    print(f"Acc: {round((correct/len(sentences))*100,2)} %")
+    print(f"Acc: {round((correct/sentences.shape[0])*100,2)} %")
     correct=0
  
 
