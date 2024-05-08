@@ -47,23 +47,23 @@ def forward(bias, layer, x):
     return(sigmoid(pre))
     
 
-""""
+
 sentences=[]
 for i in df_train.head(5)['sentence'].values:
-    sec=np.array([])
+    sec=[]
     for n in i: 
         sec=np.append(sec,ord(n))
-    #print(sec)
+   # print(sec)
     sentences.append(sec)
-   # print(sentences)
+print(sentences)
 
 """"
-
 #Sätze einlesen
 sentences=np.empty((0,5))
 for i in df_train.head(50)['sentence'].values:
     sentences = np.insert(sentences, len(sentences), np.array([[ord(i[0]),ord(i[1]),ord(i[2]),ord(i[3]),ord(i[4])]]),axis=0)
 print(sentences)
+"""
 
   
 #Labels einlesen
