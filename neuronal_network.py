@@ -47,7 +47,7 @@ def forward(bias, weight, x):
     return(sigmoid(pre))
     
 
-
+"""""
 sentences=[]
 for i in df_train.head(5)['sentence'].values:
     sec=[]
@@ -57,13 +57,13 @@ for i in df_train.head(5)['sentence'].values:
     sentences.append(sec)
 print(sentences)
 
-""""
+"""
 #Sätze einlesen
 sentences=np.empty((0,5))
 for i in df_train.head(50)['sentence'].values:
     sentences = np.insert(sentences, len(sentences), np.array([[ord(i[0]),ord(i[1]),ord(i[2]),ord(i[3]),ord(i[4])]]),axis=0)
 print(sentences)
-"""
+
 
   
 #Labels einlesen
