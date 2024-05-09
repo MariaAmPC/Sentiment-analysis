@@ -26,8 +26,8 @@ def get_mnist():
     return images, labels
 
 images,imlabels=get_mnist()
-images=images[:50]
-imlabels=imlabels[:50]
+images=images[:100]
+imlabels=imlabels[:100]
 
 #Daten einlesen
 url_test =("https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/Testing_meme_dataset.csv")
@@ -86,11 +86,15 @@ w_l1_o = np.random.uniform(-0.5,0.5,(gr_out,gr_l1))
 b_i_l1 = np.zeros((gr_l1,1))
 b_l1_o = np.zeros((gr_out,1))
 
-count = 10 #Anzahl der Durchläufe
+count = 20 #Anzahl der Durchläufe
 correct = 0 #Anzahl korrekten Ergebnisse
 learnrate = 0.01
 
 for counter in range(count):
+    w_l1_o_change=0
+    b_l1_o_change=0
+    w_i_l1_change=0
+    b_i_l1_change=0
     for sentence,label in zip(sentences,labels):
 
         sentence.shape+=(1,)
@@ -109,6 +113,9 @@ for counter in range(count):
         correct += int(np.argmax(out) == np.argmax(label))
         #print(err)
 
+        
+        #VERSION 1: Nach jeden Durchlauf Werte ändern
+        """
         #Derivative berechnen: Backpropagation-weights * Ableitung von Sigmoid
         delta_out = out - label
         w_l1_o += -learnrate* delta_out @ np.transpose(l1)
@@ -117,16 +124,33 @@ for counter in range(count):
         delta_l1 = np.transpose(w_l1_o) @ delta_out * (l1*(1-l1))
         w_i_l1 += -learnrate* delta_l1 @ np.transpose(sentence)
         b_i_l1 += -learnrate* delta_l1
-        
+        """
+        #VERSION 2: Nach einer Epoche Werte ändern
+        w_l1_o_final = w_l1_o
 
-        print(label)
-        print(print(out))
-        print(int(np.argmax(out) == np.argmax(label)))
+        delta_out = out - label
+        w_l1_o_final += -learnrate* delta_out @ np.transpose(l1)
+        w_l1_o_change += -learnrate* delta_out @ np.transpose(l1)
+        b_l1_o_change += -learnrate* delta_out
+
+        delta_l1 = np.transpose(w_l1_o_final) @ delta_out * (l1*(1-l1))
+        w_i_l1_change += -learnrate* delta_l1 @ np.transpose(sentence)
+        b_i_l1_change += -learnrate* delta_l1
+
+
+    w_i_l1 += w_i_l1_change /count
+    b_i_l1 += b_i_l1_change /count
+    w_l1_o += w_l1_o_change /count
+    b_l1_o += b_l1_o_change /count
+    #Version 2-ENDE
+
 
     #Ausgeben der Genauigkeit nach jeder Iteration    
     print(f"Acc: {round((correct/sentences.shape[0])*100,2)} %")
     correct=0
-""""
+
+
+"""
 while True:
     index = int(input("Enter a number (0 - 59999): "))
     img = images[index]
@@ -142,4 +166,4 @@ while True:
 
     plt.title(f"Subscribe if its a {o.argmax()} :)")
     plt.show()
-      """  
+  """     
