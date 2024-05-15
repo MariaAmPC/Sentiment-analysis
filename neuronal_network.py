@@ -9,9 +9,9 @@ import matplotlib.pyplot as plt
 size=3
 gr=[0]*size
 
-gr[0]=784
-gr[1]=30
-gr[2]=10
+gr[0]=5
+gr[1]=10
+gr[2]=2
 
 #Weigths und Biases festlegen: Weights zufällig, Biases auf 0
 weight=[0]*size
@@ -19,6 +19,7 @@ bias=[0]*size
 for i in range(size-1):
     weight[i] = np.random.uniform(-0.5,0.5,(gr[i+1],gr[i]))
     bias[i] = np.zeros((gr[i+1],1))
+    
 
 #Methoden definieren
 def sigmoid(value): 
@@ -28,7 +29,8 @@ def forward(bias, weight, x):
     pre= bias+ weight @ x
     return(sigmoid(pre))
 
-
+def getgr():
+    return gr[0]
 """
 -------EINLESEN DATEN-------
 """
@@ -48,8 +50,8 @@ def get_mnist():
     return images, labels
 
 images,imlabels=get_mnist()
-images=images[:100]
-imlabels=imlabels[:100]
+images=images[:500]
+imlabels=imlabels[:500]
 
 #Daten einlesen
 url_test =("https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/Testing_meme_dataset.csv")
@@ -95,7 +97,7 @@ for i in df_train.head(50)['label'].values:
 -------START NN-------
 """
 
-epoch = 30 #Anzahl der Epochen
+epoch = 20 #Anzahl der Epochen
 correct = 0 #Anzahl korrekte Ergebnisse
 count = 0 #Anzahl Durchläufe pro Epoche bzw. Testgröße
 learnrate = 0.01
@@ -104,7 +106,7 @@ for epoche in range(epoch):
     w_change=[0]*size
     b_change=[0]*size
     
-    for sentence,label in zip(images,imlabels):
+    for sentence,label in zip(sentences,labels):
 
         sentence.shape+=(1,)
         label.shape+=(1,)
@@ -141,6 +143,7 @@ for epoche in range(epoch):
                 #Vorüberhende Speicherung der Weight-Änderungen in w_change bevor nach Epoche Durchschnitt genommen wird
                 w_final[i-1] += -learnrate* delta_l[i] @ np.transpose(l[i-1])
                 w_change[i-1] += -learnrate* delta_l[i] @ np.transpose(l[i-1])
+
             b_change[i-1] += -learnrate* delta_l[i]
 
 
@@ -155,25 +158,34 @@ for epoche in range(epoch):
     correct=0
     count=0
 
+#trainiertes Modell speichern
+dict={}
+for i in range(size-1):
+    dict[f'w{i}']=weight[i]
+    dict[f'b{i}']=bias[i]
+np.savez('neuronal_network.npz', **dict)
+
+
 
 """
 -------TESTEN NN-------
 """
 
+"""
 while True:
     index = int(input("Enter a number (0 - 59999): "))
     img = images[index]
     plt.imshow(img.reshape(28, 28), cmap="Greys")
 
     img.shape += (1,)
-    """
+    
     # Forward propagation input -> hidden
     h_pre = b_i_l1 + w_i_l1 @ img.reshape(784, 1)
     h = 1 / (1 + np.exp(-h_pre))
     # Forward propagation hidden -> output
     o_pre = b_l1_o + w_l1_o @ h
     o = 1 / (1 + np.exp(-o_pre))
-    """
+    
     l=[0]*size
     for i in range(1, size):
         if i == 1:
@@ -183,4 +195,5 @@ while True:
 
     plt.title(f"Subscribe if its a {l[size-1].argmax()} :)")
     plt.show()
-     
+
+    """
