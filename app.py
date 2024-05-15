@@ -1,56 +1,66 @@
 import streamlit as st
 import numpy as np
-from neuronal_network import w_i_l1, w_l1_o, b_i_l1, b_l1_o
-import pandas as pd
 
-url_test =("https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/Testing_meme_dataset.csv")
-url_train=("https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/Training_meme_dataset.csv")
-url_validation=("https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/Validation_meme_dataset.csv")
+# Größe des neuronalen Netzwerks festlegen
+size = 3
+gr = [0] * size
+gr[0] = 784
+gr[1] = 30
+gr[2] = 10
 
-df_test= pd.read_csv(url_test,index_col=0)
-df_train= pd.read_csv(url_train,index_col=0)
-df_validation= pd.read_csv(url_validation,index_col=0)
+# Gewichte und Biases festlegen: Weights zufällig, Biases auf 0
+weight = [0] * size
+bias = [0] * size
+for i in range(size - 1):
+    weight[i] = np.random.uniform(-0.5, 0.5, (gr[i + 1], gr[i]))
+    bias[i] = np.zeros((gr[i + 1], 1))
 
-def sigmoid(value): 
-    return 1/ (1 + np.exp(-value))
+# Methode zur Vorwärtspropagierung definieren
+def sigmoid(value):
+    return 1 / (1 + np.exp(-value))
 
-def forward(bias, weight, x): 
-    pre= bias+ weight @ x
-    return(sigmoid(pre))
+def forward(bias, weight, x):
+    pre = bias + weight @ x
+    return sigmoid(pre)
 
-def predict (sentence):
-
+# Methode zur Vorhersage definieren
+# Methode zur Vorhersage definieren
+def predict(sentence):
     # Eingabedaten initialisieren
-    input_data = np.empty((5, 1))
+    input_data = np.zeros((784, 1))
     
-    # Konvertiere den Satz in das numerische Format und fülle die Eingabedaten
-    for i, char in enumerate(sentence[:5]):  # Nur die ersten fünf Zeichen des Satzes
-        input_data[i, 0] = ord(char)
+    # Konvertiere den Text in das numerische Format und fülle die Eingabedaten
+    for i, char in enumerate(sentence):
+        if i < 784:  # Nur die ersten 784 Zeichen des Textes verwenden
+            input_data[i, 0] = ord(char)
 
-    # Führe die Vorwärtspropagierung durch
-    l1 = forward(b_i_l1, w_i_l1, input_data)
-    out = forward(b_l1_o, w_l1_o, l1)
-
-
-    if out[0] > out [1]:
-        return "offensive"
-    else:
-        return "non-offensive"
-    
-
-def main():
-    st.title("Hate speech detection")
-
-    # Eingabefeld für den Satz
-    sentence = st.text_input("Geben Sie einen Satz ein:")
-
-    # Vorhersage machen, wenn ein Satz eingegeben wird
-    if st.button("Vorhersage"):
-        if sentence:
-            prediction = predict(sentence)
-            st.write(f"Der Satz wurde als {prediction} eingestuft.")
+    l = [0] * size
+    for i in range(1, size):
+        if i == 1:
+            l[1] = forward(bias[0], weight[0], input_data)
         else:
-            st.write("Bitte geben Sie einen Satz ein.")
+            l[i] = forward(bias[i - 1], weight[i - 1], l[i - 1])
+
+    if l[size - 1][0] > l[size - 1][1]:
+        return "offensiv"
+    else:
+        return "nicht offensiv"
+
+
+# Streamlit App definieren
+def main():
+    st.title("Offensivitätsvorhersage")
+
+    # Eingabefeld für den Text
+    text = st.text_area("Geben Sie Ihren Text hier ein:")
+
+    # Vorhersage machen, wenn Text eingegeben wird
+    if st.button("Vorhersage"):
+        if text:
+            prediction = predict(text)
+            st.write(f"Der Text wurde als {prediction} eingestuft.")
+        else:
+            st.write("Bitte geben Sie einen Text ein.")
 
 if __name__ == "__main__":
     main()
