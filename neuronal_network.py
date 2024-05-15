@@ -5,11 +5,33 @@ import requests
 from io import BytesIO
 import matplotlib.pyplot as plt
 
-#Größe des Netzwerkes festlegen
-gr_in=5
-gr_l1=10
-gr_out=2
+#Größe des Netzwerkes festlegen (size = Anzahl der hiddenlayer + Input und Output)
+size=3
+gr=[0]*size
 
+gr[0]=784
+gr[1]=30
+gr[2]=10
+
+#Weigths und Biases festlegen: Weights zufällig, Biases auf 0
+weight=[0]*size
+bias=[0]*size
+for i in range(size-1):
+    weight[i] = np.random.uniform(-0.5,0.5,(gr[i+1],gr[i]))
+    bias[i] = np.zeros((gr[i+1],1))
+
+#Methoden definieren
+def sigmoid(value): 
+    return 1/ (1 + np.exp(-value))
+
+def forward(bias, weight, x): 
+    pre= bias+ weight @ x
+    return(sigmoid(pre))
+
+
+"""
+-------EINLESEN DATEN-------
+"""
 
 #Einlesen von anderem Datensatz, nur zum testen des NN. Wird danach wieder gelöscht
 def get_mnist():
@@ -38,13 +60,6 @@ url_validation=("https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/Va
 df_test= pd.read_csv(url_test,index_col=0)
 df_train= pd.read_csv(url_train,index_col=0)
 df_validation= pd.read_csv(url_validation,index_col=0)
-
-def sigmoid(value): 
-    return 1/ (1 + np.exp(-value))
-
-def forward(bias, weight, x): 
-    pre= bias+ weight @ x
-    return(sigmoid(pre))
     
 
 """""
@@ -63,8 +78,6 @@ sentences=np.empty((0,5))
 for i in df_train.head(50)['sentence'].values:
     sentences = np.insert(sentences, len(sentences), np.array([[ord(i[0]),ord(i[1]),ord(i[2]),ord(i[3]),ord(i[4])]]),axis=0)
 print(sentences)
-
-
   
 #Labels einlesen
 labels=np.empty((0,2))
@@ -77,93 +90,97 @@ for i in df_train.head(50)['label'].values:
         print("ERROR")
     labels = np.insert(labels, len(labels), newrow, axis=0)
 
-#Gewichte der Neuronenverbindugnen zufällig festlegen
-w_i_l1 = np.random.uniform(-0.5,0.5,(gr_l1,gr_in))
-w_l1_o = np.random.uniform(-0.5,0.5,(gr_out,gr_l1))
 
+"""
+-------START NN-------
+"""
 
-#Gewichte der Biases auf 0 setzen
-b_i_l1 = np.zeros((gr_l1,1))
-b_l1_o = np.zeros((gr_out,1))
-
-count = 20 #Anzahl der Durchläufe
-correct = 0 #Anzahl korrekten Ergebnisse
+epoch = 30 #Anzahl der Epochen
+correct = 0 #Anzahl korrekte Ergebnisse
+count = 0 #Anzahl Durchläufe pro Epoche bzw. Testgröße
 learnrate = 0.01
 
-for counter in range(count):
-    w_l1_o_change=0
-    b_l1_o_change=0
-    w_i_l1_change=0
-    b_i_l1_change=0
-    for sentence,label in zip(sentences,labels):
+for epoche in range(epoch):
+    w_change=[0]*size
+    b_change=[0]*size
+    
+    for sentence,label in zip(images,imlabels):
 
         sentence.shape+=(1,)
         label.shape+=(1,)
-        #print(sentence)
-        #print(label)
 
         #foreward propagation
-        l1 = forward(b_i_l1, w_i_l1, sentence)
-        out = forward(b_l1_o, w_l1_o, l1)
+        l=[0]*size
+        for i in range(1, size):
+            if i == 1:
+                l[1] = forward(bias[0], weight[0], sentence)
+            else:
+                l[i] = forward(bias[i-1], weight[i-1], l[i-1])
     
-        #print(out)
 
         #Error-wert berechnen
-        err = 1/len(out) * np.sum((out - label)**2, axis=0)
-        correct += int(np.argmax(out) == np.argmax(label))
-        #print(err)
-
+        err = 1/len(l[size-1]) * np.sum((l[size-1] - label)**2, axis=0)
+        correct += int(np.argmax(l[size-1]) == np.argmax(label))
+        count+=1
         
-        #VERSION 1: Nach jeden Durchlauf Werte ändern
-        """
-        #Derivative berechnen: Backpropagation-weights * Ableitung von Sigmoid
-        delta_out = out - label
-        w_l1_o += -learnrate* delta_out @ np.transpose(l1)
-        b_l1_o += -learnrate* delta_out
-
-        delta_l1 = np.transpose(w_l1_o) @ delta_out * (l1*(1-l1))
-        w_i_l1 += -learnrate* delta_l1 @ np.transpose(sentence)
-        b_i_l1 += -learnrate* delta_l1
-        """
-        #VERSION 2: Nach einer Epoche Werte ändern
-        w_l1_o_final = w_l1_o
-
-        delta_out = out - label
-        w_l1_o_final += -learnrate* delta_out @ np.transpose(l1)
-        w_l1_o_change += -learnrate* delta_out @ np.transpose(l1)
-        b_l1_o_change += -learnrate* delta_out
-
-        delta_l1 = np.transpose(w_l1_o_final) @ delta_out * (l1*(1-l1))
-        w_i_l1_change += -learnrate* delta_l1 @ np.transpose(sentence)
-        b_i_l1_change += -learnrate* delta_l1
+        #Backpropagation Start
+        
+        #Zwischenspeichern der Weights
+        w_final = [i for i in weight]
+ 
+        delta_l = [0]*size
+        for i in range (size-1, 0, -1):
+            if i == size-1:
+                delta_l[i] = l[size-1] - label
+            else:
+                #Derivative berechnen: Backpropagation-weights * Ableitung von Sigmoid
+                delta_l[i] = np.transpose(w_final[i]) @ delta_l[i+1] * (l[i]*(1-l[i]))
+            if i == 1:
+                w_change[i-1] += -learnrate* delta_l[i] @ np.transpose(sentence)
+            else:
+                #Vorüberhende Speicherung der Weight-Änderungen in w_change bevor nach Epoche Durchschnitt genommen wird
+                w_final[i-1] += -learnrate* delta_l[i] @ np.transpose(l[i-1])
+                w_change[i-1] += -learnrate* delta_l[i] @ np.transpose(l[i-1])
+            b_change[i-1] += -learnrate* delta_l[i]
 
 
-    w_i_l1 += w_i_l1_change /count
-    b_i_l1 += b_i_l1_change /count
-    w_l1_o += w_l1_o_change /count
-    b_l1_o += b_l1_o_change /count
-    #Version 2-ENDE
-
+    #Updaten der Weight/ Biases nach Abschluss einer Epoche: Durchschnitt nehmen
+    for i in range(size):
+        weight[i] += w_change[i] / count
+        bias[i] += b_change[i] / count
+ 
 
     #Ausgeben der Genauigkeit nach jeder Iteration    
-    print(f"Acc: {round((correct/sentences.shape[0])*100,2)} %")
+    print(f"Acc: {round((correct/count)*100,2)} %")
     correct=0
+    count=0
 
 
 """
+-------TESTEN NN-------
+"""
+
 while True:
     index = int(input("Enter a number (0 - 59999): "))
     img = images[index]
     plt.imshow(img.reshape(28, 28), cmap="Greys")
 
     img.shape += (1,)
+    """
     # Forward propagation input -> hidden
     h_pre = b_i_l1 + w_i_l1 @ img.reshape(784, 1)
     h = 1 / (1 + np.exp(-h_pre))
     # Forward propagation hidden -> output
     o_pre = b_l1_o + w_l1_o @ h
     o = 1 / (1 + np.exp(-o_pre))
+    """
+    l=[0]*size
+    for i in range(1, size):
+        if i == 1:
+            l[1] = forward(bias[0],weight[0],img.reshape(784, 1))
+        else:
+            l[i] = forward(bias[i-1], weight[i-1], l[i-1])
 
-    plt.title(f"Subscribe if its a {o.argmax()} :)")
+    plt.title(f"Subscribe if its a {l[size-1].argmax()} :)")
     plt.show()
-  """     
+     
