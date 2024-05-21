@@ -1,41 +1,42 @@
+import numpy as np
 import nltk
-nltk.download('punkt')
-from gensim.models import Word2Vec
 from nltk.tokenize import word_tokenize
 from gensim.models import KeyedVectors
+from sklearn.feature_extraction.text import TfidfVectorizer
+import pandas as pd
 
-# Beispieltext
-sentence = "This is a sample sentence to convert into vector."
+url_test =("https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/Testing_meme_dataset.csv")
+df_test= pd.read_csv(url_test,index_col=0)
 
-# Tokenisierung des Satzes
-tokens = word_tokenize(sentence.lower())
+# Beispieltextkorpus (ersetze dies durch deinen Datensatz)
+corpus = df_test['sentence']
 
-# Bereitstellen der Word2Vec-Modelldatei (ersetze "path/to/word2vec_model.bin" durch den Pfad zu deinem Word2Vec-Modell)
-#word2vec_model = Word2Vec.load(r"C:\Users\49170\Documents\FAU\ML4B\GoogleNews-vectors-negative300.bin")
+# Initialisierung des TF-IDF-Vektorisierers
+tfidf_vectorizer = TfidfVectorizer()
+tfidf_matrix = tfidf_vectorizer.fit_transform(corpus)
+tfidf_feature_names = tfidf_vectorizer.get_feature_names_out()
+
+# Laden des vortrainierten Word2Vec-Modells
 word2vec_model = KeyedVectors.load_word2vec_format(r"C:\Users\49170\Documents\FAU\ML4B\GoogleNews-vectors-negative300.bin", binary=True)
 
-# Berechnen der Word Embeddings für jedes Token im Satz
-word_vectors = [word2vec_model.get_vector(word) for word in tokens if word in word2vec_model.key_to_index]
+# Funktion zur Berechnung des Satzvektors
+def get_sentence_vector(sentence, tfidf_vectorizer, tfidf_feature_names, word2vec_model):
+    tokens = word_tokenize(sentence.lower())
+    tfidf_vector = tfidf_vectorizer.transform([" ".join(tokens)])
+    tfidf_scores = {word: tfidf_vector[0, tfidf_feature_names.tolist().index(word)] for word in tokens if word in tfidf_feature_names}
+    
+    word_vectors = []
+    for word in tokens:
+        if word in word2vec_model.key_to_index and word in tfidf_scores:
+            word_vector = word2vec_model.get_vector(word) * tfidf_scores[word]
+            word_vectors.append(word_vector)
+    
+    if word_vectors:
+        sentence_vector = np.mean(word_vectors, axis=0)
+    else:
+        sentence_vector = np.zeros(word2vec_model.vector_size)
+    
+    return sentence_vector
 
-# Berechnen des Durchschnitts der Word Embeddings
-if word_vectors:
-    sentence_vector = sum(word_vectors) / len(word_vectors)
-else:
-    # Wenn kein Wort im Modell vorhanden ist, dann wird der Satzvektor Null sein
-    sentence_vector = [0] * word2vec_model.vector_size
-
-# Ergebnis: Der Satzvektor
-print(sentence_vector)
-
-"""
-für die Konsole: 
-
-pip install nltk
-pip install gensim
-pip install scipy==1.10.1
-
-für das Modell 
-
-https://www.kaggle.com/datasets/leadbest/googlenewsvectorsnegative300
-
-"""
+# Berechnen der Vektoren für jeden Satz im Korpus
+sentence_vectors = [get_sentence_vector(sentence, tfidf_vectorizer, tfidf_feature_names, word2vec_model) for sentence in corpus]
