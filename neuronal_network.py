@@ -63,18 +63,6 @@ df_test= pd.read_csv(url_test,index_col=0)
 df_train= pd.read_csv(url_train,index_col=0)
 df_validation= pd.read_csv(url_validation,index_col=0)
     
-
-"""""
-sentences=[]
-for i in df_train.head(5)['sentence'].values:
-    sec=[]
-    for n in i: 
-        sec=np.append(sec,ord(n))
-   # print(sec)
-    sentences.append(sec)
-print(sentences)
-
-"""
 #Sätze einlesen
 sentences=np.empty((0,5))
 for i in df_train.head(50)['sentence'].values:
