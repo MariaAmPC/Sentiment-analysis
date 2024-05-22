@@ -39,4 +39,7 @@ def get_sentence_vector(sentence, tfidf_vectorizer, tfidf_feature_names, word2ve
     return sentence_vector
 
 # Berechnen der Vektoren für jeden Satz im Korpus
-sentence_vectors = [get_sentence_vector(sentence, tfidf_vectorizer, tfidf_feature_names, word2vec_model) for sentence in corpus]
+#sentence_vectors = [get_sentence_vector(sentence, tfidf_vectorizer, tfidf_feature_names, word2vec_model) for sentence in corpus]
+print(get_sentence_vector(df_test["sentence"][1], tfidf_vectorizer, tfidf_feature_names, word2vec_model).size)
+print(get_sentence_vector(df_test["sentence"][12], tfidf_vectorizer, tfidf_feature_names, word2vec_model).size)
+print(get_sentence_vector(df_test["sentence"][69], tfidf_vectorizer, tfidf_feature_names, word2vec_model).size)
