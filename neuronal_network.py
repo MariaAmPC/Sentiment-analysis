@@ -65,7 +65,7 @@ url_test =("https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/Testing
 url_train=("https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/Training_meme_dataset.csv")
 url_validation=("https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/Validation_meme_dataset.csv")
 
-df=pd.read_csv(r"C:\Users\49170\Documents\FAU\ML4B\tweet_emotions.csv")
+df=pd.read_csv(r"https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/tweet_emotions.csv")
 df = df[df.sentiment != 'empty']
 df = df[df.sentiment != 'enthusiasm']
 df = df[df.sentiment != 'fun']
