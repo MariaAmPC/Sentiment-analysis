@@ -4,6 +4,10 @@ import pathlib
 import requests
 from io import BytesIO
 import matplotlib.pyplot as plt
+import nltk
+from nltk.tokenize import word_tokenize
+from gensim.models import KeyedVectors
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 #Größe des Netzwerkes festlegen (size = Anzahl der hiddenlayer + Input und Output)
 size=3
@@ -63,11 +67,45 @@ df_test= pd.read_csv(url_test,index_col=0)
 df_train= pd.read_csv(url_train,index_col=0)
 df_validation= pd.read_csv(url_validation,index_col=0)
     
-#Sätze einlesen
+###Sätze einlesen die vektoren haben später eine größe von 300
+"""
+#Corpus definieren auf dem die Gewichte basieren
+corpus = df_test['sentence']
+
+#initialisierung des TF-IDF-Vektorisierers
+tfidf_vectorizer = TfidfVectorizer()
+tfidf_matrix = tfidf_vectorizer.fit_transform(corpus)
+tfidf_feature_names = tfidf_vectorizer.get_feature_names_out()
+
+# Laden des vortrainierten Word2Vec-Modells (sollte später nicht lokal passieren)
+word2vec_model = KeyedVectors.load_word2vec_format(r"C:\Users\49170\Documents\FAU\ML4B\GoogleNews-vectors-negative300.bin", binary=True)
+
+#funktion die uns den Vektor des Satztes returned 
+def get_sentence_vector(sentence):
+    tokens = word_tokenize(sentence.lower())
+    tfidf_vector = tfidf_vectorizer.transform([" ".join(tokens)]) #verwandeln des satzes in vertikales array
+    tfidf_scores = {word: tfidf_vector[0, tfidf_feature_names.tolist().index(word)] for word in tokens if word in tfidf_feature_names} #gewichtung der einzelnen wörter erfahren
+    
+    word_vectors = []
+    for word in tokens:
+        if word in word2vec_model.key_to_index and word in tfidf_scores:
+            word_vector = word2vec_model.get_vector(word) * tfidf_scores[word] #vektor aus dem word2vec_model mit dem gewichtetem vektor aus dem TF system
+            word_vectors.append(word_vector)
+    
+    #durchschnitt der gewichteten vektoren erlangen
+    if word_vectors:
+        sentence_vector = np.mean(word_vectors, axis=0)
+    else:
+        sentence_vector = np.zeros(word2vec_model.vector_size)
+    
+    return sentence_vector
+
+"""
 sentences=np.empty((0,5))
 for i in df_train.head(50)['sentence'].values:
     sentences = np.insert(sentences, len(sentences), np.array([[ord(i[0]),ord(i[1]),ord(i[2]),ord(i[3]),ord(i[4])]]),axis=0)
 print(sentences)
+
   
 #Labels einlesen
 labels=np.empty((0,2))
