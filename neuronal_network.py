@@ -8,14 +8,17 @@ import nltk
 from nltk.tokenize import word_tokenize
 from gensim.models import KeyedVectors
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import train_test_split
+from collections import Counter
+
 
 #Größe des Netzwerkes festlegen (size = Anzahl der hiddenlayer + Input und Output)
 size=3
 gr=[0]*size
 
-gr[0]=5
-gr[1]=10
-gr[2]=2
+gr[0]=300
+gr[1]=30 
+gr[2]=6
 
 #Weigths und Biases festlegen: Weights zufällig, Biases auf 0
 weight=[0]*size
@@ -38,7 +41,7 @@ def getgr():
 """
 -------EINLESEN DATEN-------
 """
-
+"""
 #Einlesen von anderem Datensatz, nur zum testen des NN. Wird danach wieder gelöscht
 def get_mnist():
     url = "https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/mnist.npz"
@@ -56,21 +59,36 @@ def get_mnist():
 images,imlabels=get_mnist()
 images=images[:500]
 imlabels=imlabels[:500]
-
+"""
 #Daten einlesen
 url_test =("https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/Testing_meme_dataset.csv")
 url_train=("https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/Training_meme_dataset.csv")
 url_validation=("https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/Validation_meme_dataset.csv")
 
+df=pd.read_csv(r"C:\Users\49170\Documents\FAU\ML4B\tweet_emotions.csv")
+df = df[df.sentiment != 'empty']
+df = df[df.sentiment != 'enthusiasm']
+df = df[df.sentiment != 'fun']
+df = df[df.sentiment != 'boredom']
+df = df[df.sentiment != 'anger']
+df = df[df.sentiment != 'relief']
+df = df[df.sentiment != 'surprise']
 
-df_test= pd.read_csv(url_test,index_col=0)
-df_train= pd.read_csv(url_train,index_col=0)
-df_validation= pd.read_csv(url_validation,index_col=0)
+
+stats = Counter(df["sentiment"])
+print(dict(stats))
+
+
+df_test, df_train = train_test_split(df , test_size=0.33, random_state=42)
+
+#df_test= pd.read_csv(url_test,index_col=0)
+#df_train= pd.read_csv(url_train,index_col=0)
+#df_validation= pd.read_csv(url_validation,index_col=0)
     
 ###Sätze einlesen die vektoren haben später eine größe von 300
-"""
+
 #Corpus definieren auf dem die Gewichte basieren
-corpus = df_test['sentence']
+corpus = df_test['content']
 
 #initialisierung des TF-IDF-Vektorisierers
 tfidf_vectorizer = TfidfVectorizer()
@@ -78,6 +96,7 @@ tfidf_matrix = tfidf_vectorizer.fit_transform(corpus)
 tfidf_feature_names = tfidf_vectorizer.get_feature_names_out()
 
 # Laden des vortrainierten Word2Vec-Modells (sollte später nicht lokal passieren)
+
 word2vec_model = KeyedVectors.load_word2vec_format(r"C:\Users\49170\Documents\FAU\ML4B\GoogleNews-vectors-negative300.bin", binary=True)
 
 #funktion die uns den Vektor des Satztes returned 
@@ -100,33 +119,41 @@ def get_sentence_vector(sentence):
     
     return sentence_vector
 
-"""
-sentences=np.empty((0,5))
-for i in df_train.head(50)['sentence'].values:
-    sentences = np.insert(sentences, len(sentences), np.array([[ord(i[0]),ord(i[1]),ord(i[2]),ord(i[3]),ord(i[4])]]),axis=0)
-print(sentences)
+sentences=np.empty((0,300))
+for i in df_train['content'].values:
+    sentences = np.insert(sentences, len(sentences), get_sentence_vector(i),axis=0)
+#print(sentences)
 
   
 #Labels einlesen
-labels=np.empty((0,2))
-for i in df_train.head(50)['label'].values:
-    if i == "offensive":
-        newrow = np.array([[1,0]])
-    elif i == "Non-offensiv":
-        newrow = np.array([[0,1]])
+labels=np.empty((0,6))
+for i in df_train['sentiment'].values:
+    if i == "neutral":
+        newrow = np.array([[1,0,0,0,0,0]])
+    elif i == "worry":
+        newrow = np.array([[0,1,0,0,0,0]])
+    elif i == "happiness":
+        newrow = np.array([[0,0,1,0,0,0]])
+    elif i == "sadness":
+        newrow = np.array([[0,0,0,1,0,0]])
+    elif i == "love":
+        newrow = np.array([[0,0,0,0,1,0]])
+    elif i == "hate":
+        newrow = np.array([[0,0,0,0,0,1]])
     else:
-        print("ERROR")
+        print("ERROR" + i)
     labels = np.insert(labels, len(labels), newrow, axis=0)
 
 
-"""
--------START NN-------
-"""
+
+
+#-------START NN-------
+
 
 epoch = 20 #Anzahl der Epochen
 correct = 0 #Anzahl korrekte Ergebnisse
 count = 0 #Anzahl Durchläufe pro Epoche bzw. Testgröße
-learnrate = 0.01
+learnrate = 0.005
 
 for epoche in range(epoch):
     w_change=[0]*size
@@ -193,17 +220,17 @@ np.savez('neuronal_network.npz', **dict)
 
 
 
-"""
--------TESTEN NN-------
-"""
+
+#-------TESTEN NN-------
+
 
 """
 while True:
-    index = int(input("Enter a number (0 - 59999): "))
-    img = images[index]
-    plt.imshow(img.reshape(28, 28), cmap="Greys")
+    index = int(input("Enter a number (0 - 65597): "))
+    sentance = content[index]
+    print(sentance)
 
-    img.shape += (1,)
+    sentance.shape += (1,)
     
     # Forward propagation input -> hidden
     h_pre = b_i_l1 + w_i_l1 @ img.reshape(784, 1)
