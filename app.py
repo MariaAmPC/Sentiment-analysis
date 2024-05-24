@@ -52,7 +52,7 @@ def predict(sentence):
 
 # Streamlit App definieren
 def main():
-    st.title("Offensivitätsvorhersage")
+    st.title("Hate speech detection")
 
     # Eingabefeld für den Text
     text = st.text_area("Geben Sie Ihren Text hier ein:")
