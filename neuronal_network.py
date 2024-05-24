@@ -14,12 +14,13 @@ from sentence_transformers import SentenceTransformer
 
 
 #Größe des Netzwerkes festlegen (size = Anzahl der hiddenlayer + Input und Output)
-size=3
+size=4
 gr=[0]*size
 
 gr[0]=768
 gr[1]=30 
-gr[2]=6
+gr[2]=10
+gr[3]=6
 
 #Weigths und Biases festlegen: Weights zufällig, Biases auf 0
 weight=[0]*size
@@ -53,6 +54,7 @@ df = df[df.sentiment != 'surprise']
 
 df_test, df_train = train_test_split(df , test_size=0.33, random_state=42)
 
+#BERT modell zum sätze einlesen
 model = SentenceTransformer('bert-base-nli-mean-tokens')
 sentences = model.encode(df_train["content"].tolist())
   
