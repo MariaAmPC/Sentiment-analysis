@@ -11,6 +11,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from collections import Counter
 from sentence_transformers import SentenceTransformer
+import functools
+from sentence_transformers import SentenceTransformer
+
 
 
 #Größe des Netzwerkes festlegen (size = Anzahl der hiddenlayer + Input und Output)
@@ -55,7 +58,16 @@ df = df[df.sentiment != 'surprise']
 df_test, df_train = train_test_split(df , test_size=0.33, random_state=42)
 
 #BERT modell zum sätze einlesen
-model = SentenceTransformer('bert-base-nli-mean-tokens')
+class BertModelSingleton:
+    _instance = None
+
+    @classmethod
+    def get_instance(cls):
+        if cls._instance is None:
+            cls._instance = SentenceTransformer('bert-base-nli-mean-tokens')
+        return cls._instance
+
+model = BertModelSingleton.get_instance()
 sentences = model.encode(df_train["content"].tolist())
   
 #Labels einlesen
