@@ -18,13 +18,12 @@ import os
 
 
 #Größe des Netzwerkes festlegen (size = Anzahl der hiddenlayer + Input und Output)
-size=4
+size=3
 gr=[0]*size
 
 gr[0]=768
 gr[1]=30 
-gr[2]=10
-gr[3]=6
+gr[2]=6
 
 #Weigths und Biases festlegen: Weights zufällig, Biases auf 0
 weight=[0]*size
