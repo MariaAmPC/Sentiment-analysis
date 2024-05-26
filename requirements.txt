@@ -1,5 +1,5 @@
 streamlit
 sentence-transformers
-sklearn.model_selection
+sklearn-model
 numpy
 pandas
