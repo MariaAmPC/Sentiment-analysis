@@ -1,7 +1,6 @@
 import streamlit as st
 import numpy as np
 from sentence_transformers import SentenceTransformer
-#import joblib
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
@@ -45,7 +44,7 @@ def predict_hate_speech(sentence):
     return emotions[prediction]
 
 # Streamlit App
-st.title('Hate Speech Detection')
+st.title('Tweet Sentiment Analysis')
 
 # Auswahl eines Textes aus dem Datensatz
 #st.sidebar.subheader('Wähle einen Text aus dem Datensatz')
@@ -56,8 +55,8 @@ st.title('Hate Speech Detection')
     #st.write('Prediction:', prediction)
 
 # Texteingabe für eigene Vorhersage
-st.subheader('Eigenen Text eingeben')
-user_text = st.text_area('Text eingeben')
-if st.button('Predict für eigenen Text'):
+st.subheader('Enter your own Text in English')
+user_text = st.text_area('enter Text here we classify between ["neutral", "worry", "happiness", "sadness", "love", "hate"]')
+if st.button('Predicting the Sentiment'):
     prediction = predict_hate_speech(user_text)
     st.write('Prediction:', prediction)
