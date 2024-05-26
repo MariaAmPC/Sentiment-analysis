@@ -1,5 +1,5 @@
 streamlit
--U sentence-transformers
+sentence-transformers
 joblib
 sklearn.model_selection
 numpy
