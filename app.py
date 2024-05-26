@@ -1,7 +1,7 @@
 import streamlit as st
 import numpy as np
 from sentence_transformers import SentenceTransformer
-import joblib
+#import joblib
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
