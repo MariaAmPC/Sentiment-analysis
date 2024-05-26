@@ -1,69 +1,63 @@
 import streamlit as st
 import numpy as np
+from sentence_transformers import SentenceTransformer
+import joblib
+import pandas as pd
+from sklearn.model_selection import train_test_split
 
-#Laden des trainierten Modells
-network = np.load('neuronal_network.npz')
+# Laden des trainierten Modells und der benötigten Daten
+loaded_model = np.load('neuronal_network.npz')
+size = int(len(loaded_model)/2)+1
+weight = [loaded_model[f'w{i}'] for i in range(size-1)]
+bias = [loaded_model[f'b{i}'] for i in range(size-1)]
+bert_model = SentenceTransformer('bert-base-nli-mean-tokens')
 
-leng = int(len(network)/2)
+emotions = ["neutral", "worry", "happiness", "sadness", "love", "hate"]
 
-weight=[0]*leng
-bias=[0]*leng
+# Laden des Datensatzes
+df = pd.read_csv("https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/tweet_emotions.csv")
+df = df[df.sentiment.isin(emotions)]
 
-for i in range(leng):
-    weight[i]=network[f'w{i}']
-    bias[i]=network[f'b{i}']
+# Trainingsdaten und Testdaten aufteilen
+df_train, df_test = train_test_split(df, test_size=0.33, random_state=42)
 
-
-# Methode zur Vorwärtspropagierung definieren
-def sigmoid(value):
+# Funktionen für Vorhersage und Textkodierung
+def sigmoid(value): 
     return 1 / (1 + np.exp(-value))
 
-def forward(bias, weight, x):
-    pre = bias + weight @ x
+def forward(bias, weight, x): 
+    pre = bias + np.dot(weight, x)
     return sigmoid(pre)
 
+def encode_text(text):
+    return bert_model.encode([text])
 
-# Methode zur Vorhersage definieren
-def predict(sentence):
-    # Eingabedaten initialisieren
-    input_data = np.zeros((5, 1))
-    
-    # Konvertiere den Text in das numerische Format und fülle die Eingabedaten
-    for i, char in enumerate(sentence):
-        if i < 5:  # Nur die ersten 784 Zeichen des Textes verwenden
-            input_data[i, 0] = ord(char)
-
-    
-    l = [0] * leng
-    for i in range(1, leng):
+def predict_hate_speech(sentence):
+    encoded_sentence = encode_text(sentence)
+    l = [0] * size
+    for i in range(1, size):
         if i == 1:
-            l[1] = forward(bias[0], weight[0], input_data)
+            l[1] = forward(bias[0], weight[0], encoded_sentence.T)
         else:
-            l[i] = forward(bias[i - 1], weight[i - 1], l[i - 1])
+            l[i] = forward(bias[i-1], weight[i-1], l[i-1])
 
-    prediction = np.argmax(l[leng - 1])
-    
-    if prediction == 0:
-        return "offensiv"
-    else:
-        return "nicht offensiv" 
+    prediction = np.argmax(l[size-1])
+    return emotions[prediction]
 
+# Streamlit App
+st.title('Hate Speech Detection')
 
+# Auswahl eines Textes aus dem Datensatz
+st.sidebar.subheader('Wähle einen Text aus dem Datensatz')
+selected_text = st.sidebar.selectbox('Text auswählen', df_train['content'])
 
-# Streamlit App definieren
-def main():
-    st.title("Hate speech detection")
+if st.sidebar.button('Predict für ausgewählten Text'):
+    prediction = predict_hate_speech(selected_text)
+    st.write('Prediction:', prediction)
 
-    # Eingabefeld für den Text
-    text = st.text_area("Geben Sie Ihren Text hier ein:")
-
-    # Vorhersage machen, wenn Text eingegeben wird
-    if st.button("Vorhersage"):
-        if text:
-            prediction = predict(text)
-            st.write(f"Der Text wurde als {prediction} eingestuft.")
-        else:
-            st.write("Bitte geben Sie einen Text ein.")
-
-if __name__ == "__main__":
-    main()
+# Texteingabe für eigene Vorhersage
+st.subheader('Eigenen Text eingeben')
+user_text = st.text_area('Text eingeben')
+if st.button('Predict für eigenen Text'):
+    prediction = predict_hate_speech(user_text)
+    st.write('Prediction:', prediction)

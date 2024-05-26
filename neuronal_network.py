@@ -38,19 +38,12 @@ def forward(bias, weight, x):
     pre= bias+ weight @ x
     return(sigmoid(pre))
 
-def getgr():
-    return gr[0]
 
 #Daten einlesen
 df=pd.read_csv(r"https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/tweet_emotions.csv")
 
-df = df[df.sentiment != 'empty']
-df = df[df.sentiment != 'enthusiasm']
-df = df[df.sentiment != 'fun']
-df = df[df.sentiment != 'boredom']
-df = df[df.sentiment != 'anger']
-df = df[df.sentiment != 'relief']
-df = df[df.sentiment != 'surprise']
+emotions = ["neutral", "worry", "happiness", "sadness", "love", "hate"]
+df = df[df.sentiment.isin(emotions)]
 
 df_test, df_train = train_test_split(df , test_size=0.33, random_state=42)
 
