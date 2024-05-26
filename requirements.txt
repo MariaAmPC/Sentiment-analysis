@@ -1,0 +1,6 @@
+streamlit
+sentence_transformers
+joblib
+sklearn.model_selection
+numpy
+pandas
