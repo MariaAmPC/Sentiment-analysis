@@ -57,7 +57,7 @@ class BertModelSingleton:
     @classmethod
     def get_instance(cls):
         if cls._instance is None:
-            cls._instance = SentenceTransformer('bert-base-nli-mean-tokens')
+            cls._instance = SentenceTransformer('sentence-transformers/all-mpnet-base-v2')
         return cls._instance
 
 model = BertModelSingleton.get_instance()
