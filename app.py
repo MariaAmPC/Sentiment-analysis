@@ -48,8 +48,8 @@ def predict_hate_speech(sentence):
 st.title('Hate Speech Detection')
 
 # Auswahl eines Textes aus dem Datensatz
-st.sidebar.subheader('Wähle einen Text aus dem Datensatz')
-selected_text = st.sidebar.selectbox('Text auswählen', df_train['content'])
+#st.sidebar.subheader('Wähle einen Text aus dem Datensatz')
+#selected_text = st.sidebar.selectbox('Text auswählen', df_train['content'])
 
 if st.sidebar.button('Predict für ausgewählten Text'):
     prediction = predict_hate_speech(selected_text)
