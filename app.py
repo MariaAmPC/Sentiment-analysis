@@ -15,11 +15,11 @@ bert_model = SentenceTransformer('bert-base-nli-mean-tokens')
 emotions = ["neutral", "worry", "happiness", "sadness", "love", "hate"]
 
 # Laden des Datensatzes
-df = pd.read_csv("https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/tweet_emotions.csv")
-df = df[df.sentiment.isin(emotions)]
+#df = pd.read_csv("https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/tweet_emotions.csv")
+#df = df[df.sentiment.isin(emotions)]
 
 # Trainingsdaten und Testdaten aufteilen
-df_train, df_test = train_test_split(df, test_size=0.33, random_state=42)
+#df_train, df_test = train_test_split(df, test_size=0.33, random_state=42)
 
 # Funktionen für Vorhersage und Textkodierung
 def sigmoid(value): 
@@ -51,9 +51,9 @@ st.title('Hate Speech Detection')
 #st.sidebar.subheader('Wähle einen Text aus dem Datensatz')
 #selected_text = st.sidebar.selectbox('Text auswählen', df_train['content'])
 
-if st.sidebar.button('Predict für ausgewählten Text'):
-    prediction = predict_hate_speech(selected_text)
-    st.write('Prediction:', prediction)
+#if st.sidebar.button('Predict für ausgewählten Text'):
+    #prediction = predict_hate_speech(selected_text)
+    #st.write('Prediction:', prediction)
 
 # Texteingabe für eigene Vorhersage
 st.subheader('Eigenen Text eingeben')
