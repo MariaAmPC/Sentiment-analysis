@@ -7,14 +7,16 @@ from sklearn.model_selection import train_test_split
 
 # Laden des trainierten Modells und der benötigten Daten
 loaded_model = np.load('neuronal_network.npz')
-size = 4
+size = int(len(loaded_model)/2)+1
 weight = [loaded_model[f'w{i}'] for i in range(size-1)]
 bias = [loaded_model[f'b{i}'] for i in range(size-1)]
 bert_model = SentenceTransformer('bert-base-nli-mean-tokens')
 
+emotions = ["neutral", "worry", "happiness", "sadness", "love", "hate"]
+
 # Laden des Datensatzes
 df = pd.read_csv("https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/tweet_emotions.csv")
-df = df[df.sentiment.isin(["neutral", "worry", "happiness", "sadness", "love", "hate"])]
+df = df[df.sentiment.isin(emotions)]
 
 # Trainingsdaten und Testdaten aufteilen
 df_train, df_test = train_test_split(df, test_size=0.33, random_state=42)
@@ -38,8 +40,9 @@ def predict_hate_speech(sentence):
             l[1] = forward(bias[0], weight[0], encoded_sentence.T)
         else:
             l[i] = forward(bias[i-1], weight[i-1], l[i-1])
-    prediction = l[-1].argmax()
-    return prediction
+
+    prediction = np.argmax(l[size-1])
+    return emotions[prediction]
 
 # Streamlit App
 st.title('Hate Speech Detection')

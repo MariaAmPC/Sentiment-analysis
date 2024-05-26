@@ -18,12 +18,9 @@ import os
 
 
 #Größe des Netzwerkes festlegen (size = Anzahl der hiddenlayer + Input und Output)
-size=3
-gr=[0]*size
 
-gr[0]=768
-gr[1]=30 
-gr[2]=6
+gr = [768,30,6]
+size = len(gr)
 
 #Weigths und Biases festlegen: Weights zufällig, Biases auf 0
 weight=[0]*size
@@ -56,6 +53,9 @@ df = df[df.sentiment != 'relief']
 df = df[df.sentiment != 'surprise']
 
 df_test, df_train = train_test_split(df , test_size=0.33, random_state=42)
+
+#df_train auf die hälfte der größe
+df_train, df_unused = train_test_split(df_train, test_size=0.5, random_state=42)
 
 #BERT modell zum sätze einlesen
 class BertModelSingleton:
