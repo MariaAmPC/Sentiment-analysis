@@ -9,7 +9,7 @@ loaded_model = np.load('neuronal_network.npz')
 size = int(len(loaded_model)/2)+1
 weight = [loaded_model[f'w{i}'] for i in range(size-1)]
 bias = [loaded_model[f'b{i}'] for i in range(size-1)]
-bert_model = SentenceTransformer('bert-base-nli-mean-tokens')
+bert_model = SentenceTransformer('sentence-transformers/all-mpnet-base-v2')
 
 emotions = ["neutral", "worry", "happiness", "sadness", "love", "hate"]
 
