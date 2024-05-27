@@ -38,6 +38,26 @@ def forward(bias, weight, x):
     pre= bias+ weight @ x
     return(sigmoid(pre))
 
+def forward_propagation(bias, weight, input):
+    l=[0]*size
+    for i in range(1, size):
+        if i == 1:
+            l[1] = forward(bias[0], weight[0], input)
+        else:
+            l[i] = forward(bias[i-1], weight[i-1], l[i-1])
+    return l
+
+def test(sentence, label):
+    correct = 0
+    count = 0
+    for sentence, label in zip(sentence, label):
+        l = forward_propagation(bias=bias, weight=weight, input=sentence)
+
+        correct += int(np.argmax(l[size-1]) == np.argmax(label))
+        count +=1
+
+    return round((correct/count)*100,2)
+
 
 #Daten einlesen
 df=pd.read_csv(r"https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/tweet_emotions.csv")
@@ -62,7 +82,10 @@ class BertModelSingleton:
 
 model = BertModelSingleton.get_instance()
 sentences = model.encode(df_train["content"].tolist())
-  
+sentence_test = model.encode(df_test["content"].tolist())
+
+#TODO: LAbles einlesen besser gestalten
+
 #Labels einlesen
 labels=np.empty((0,6))
 for i in df_train['sentiment'].values:
@@ -81,6 +104,25 @@ for i in df_train['sentiment'].values:
     else:
         print("ERROR" + i)
     labels = np.insert(labels, len(labels), newrow, axis=0)
+
+#LAbels für Test einlesen
+labels_test=np.empty((0,6))
+for i in df_test['sentiment'].values:
+    if i == "neutral":
+        newrow = np.array([[1,0,0,0,0,0]])
+    elif i == "worry":
+        newrow = np.array([[0,1,0,0,0,0]])
+    elif i == "happiness":
+        newrow = np.array([[0,0,1,0,0,0]])
+    elif i == "sadness":
+        newrow = np.array([[0,0,0,1,0,0]])
+    elif i == "love":
+        newrow = np.array([[0,0,0,0,1,0]])
+    elif i == "hate":
+        newrow = np.array([[0,0,0,0,0,1]])
+    else:
+        print("ERROR" + i)
+    labels_test = np.insert(labels_test, len(labels_test), newrow, axis=0)
 
 
 
@@ -102,6 +144,7 @@ for epoche in range(epoch):
         sentence.shape+=(1,)
         label.shape+=(1,)
 
+        """
         #foreward propagation
         l=[0]*size
         for i in range(1, size):
@@ -109,7 +152,8 @@ for epoche in range(epoch):
                 l[1] = forward(bias[0], weight[0], sentence)
             else:
                 l[i] = forward(bias[i-1], weight[i-1], l[i-1])
-    
+        """
+        l = forward_propagation(weight=weight, bias=bias, input=sentence)
 
         #Error-wert berechnen
         err = 1/len(l[size-1]) * np.sum((l[size-1] - label)**2, axis=0)
@@ -148,6 +192,8 @@ for epoche in range(epoch):
     print(f"Acc: {round((correct/count)*100,2)} %")
     correct=0
     count=0
+x=test(sentence_test, labels_test)
+print("Tset: "+ x)
 
 #trainiertes Modell speichern
 dict={}
