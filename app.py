@@ -47,7 +47,8 @@ def predict_hate_speech(sentence):
 st.title('Tweet Sentiment Analysis')
 
 df = pd.read_csv("https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/tweet_emotions.csv")
-
+emotions = ["neutral", "worry", "happiness", "sadness", "love", "hate"]
+df = df[df.sentiment.isin(emotions)]
 
 # Auswahl eines Textes aus dem Datensatz
 st.subheader('Select a Text from the Dataset')
