@@ -1,25 +1,25 @@
 import numpy as np
 import pandas as pd
-import pathlib
-import requests
+#import pathlib
+#import requests
 from io import BytesIO
 import matplotlib.pyplot as plt
-import nltk
+#import nltk
 from nltk.tokenize import word_tokenize
 from gensim.models import KeyedVectors
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
-from collections import Counter
-import functools
+#from collections import Counter
+#import functools
 from sentence_transformers import SentenceTransformer
-import joblib
-import os
+#import joblib
+#import os
 
 
 
 #Größe des Netzwerkes festlegen (size = Anzahl der hiddenlayer + Input und Output)
 
-gr = [768,30,6]
+gr = [768,50,20,6]
 size = len(gr)
 
 #Weigths und Biases festlegen: Weights zufällig, Biases auf 0
@@ -77,7 +77,7 @@ class BertModelSingleton:
     @classmethod
     def get_instance(cls):
         if cls._instance is None:
-            cls._instance = SentenceTransformer('bert-base-nli-mean-tokens')
+            cls._instance = SentenceTransformer('nreimers/albert-small-v2')
         return cls._instance
 
 model = BertModelSingleton.get_instance()
@@ -130,10 +130,10 @@ for i in df_test['sentiment'].values:
 #-------START NN-------
 
 
-epoch = 20 #Anzahl der Epochen
+epoch = 30 #Anzahl der Epochen
 correct = 0 #Anzahl korrekte Ergebnisse
 count = 0 #Anzahl Durchläufe pro Epoche bzw. Testgröße
-learnrate = 0.01
+learnrate = 0.005
 
 for epoche in range(epoch):
     w_change=[0]*size

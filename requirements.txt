@@ -1,0 +1,5 @@
+streamlit==1.4.0
+sentence-transformers
+sklearn-model
+numpy
+pandas

@@ -1,7 +1,6 @@
 import streamlit as st
 import numpy as np
 from sentence_transformers import SentenceTransformer
-import joblib
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
@@ -10,16 +9,16 @@ loaded_model = np.load('neuronal_network.npz')
 size = int(len(loaded_model)/2)+1
 weight = [loaded_model[f'w{i}'] for i in range(size-1)]
 bias = [loaded_model[f'b{i}'] for i in range(size-1)]
-bert_model = SentenceTransformer('bert-base-nli-mean-tokens')
+bert_model = SentenceTransformer('nreimers/albert-small-v2')
 
 emotions = ["neutral", "worry", "happiness", "sadness", "love", "hate"]
 
 # Laden des Datensatzes
-df = pd.read_csv("https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/tweet_emotions.csv")
-df = df[df.sentiment.isin(emotions)]
+#df = pd.read_csv("https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/tweet_emotions.csv")
+#df = df[df.sentiment.isin(emotions)]
 
 # Trainingsdaten und Testdaten aufteilen
-df_train, df_test = train_test_split(df, test_size=0.33, random_state=42)
+#df_train, df_test = train_test_split(df, test_size=0.33, random_state=42)
 
 # Funktionen für Vorhersage und Textkodierung
 def sigmoid(value): 
@@ -45,19 +44,19 @@ def predict_hate_speech(sentence):
     return emotions[prediction]
 
 # Streamlit App
-st.title('Hate Speech Detection')
+st.title('Tweet Sentiment Analysis')
 
 # Auswahl eines Textes aus dem Datensatz
-st.sidebar.subheader('Wähle einen Text aus dem Datensatz')
-selected_text = st.sidebar.selectbox('Text auswählen', df_train['content'])
+#st.sidebar.subheader('Wähle einen Text aus dem Datensatz')
+#selected_text = st.sidebar.selectbox('Text auswählen', df_train['content'])
 
-if st.sidebar.button('Predict für ausgewählten Text'):
-    prediction = predict_hate_speech(selected_text)
-    st.write('Prediction:', prediction)
+#if st.sidebar.button('Predict für ausgewählten Text'):
+    #prediction = predict_hate_speech(selected_text)
+    #st.write('Prediction:', prediction)
 
 # Texteingabe für eigene Vorhersage
-st.subheader('Eigenen Text eingeben')
-user_text = st.text_area('Text eingeben')
-if st.button('Predict für eigenen Text'):
+st.subheader('Enter your own Text in English')
+user_text = st.text_area('enter Text here we classify between ["neutral", "worry", "happiness", "sadness", "love", "hate"]')
+if st.button('Predicting the Sentiment'):
     prediction = predict_hate_speech(user_text)
     st.write('Prediction:', prediction)
