@@ -46,13 +46,16 @@ def predict_hate_speech(sentence):
 # Streamlit App
 st.title('Tweet Sentiment Analysis')
 
-# Auswahl eines Textes aus dem Datensatz
-#st.sidebar.subheader('Wähle einen Text aus dem Datensatz')
-#selected_text = st.sidebar.selectbox('Text auswählen', df_train['content'])
+df = pd.read_csv("https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/tweet_emotions.csv")
 
-#if st.sidebar.button('Predict für ausgewählten Text'):
-    #prediction = predict_hate_speech(selected_text)
-    #st.write('Prediction:', prediction)
+
+# Auswahl eines Textes aus dem Datensatz
+st.subheader('Select a Text from the Dataset')
+selected_text = st.selectbox('Select text', df['content'])
+
+if st.button('Predict sentiment for selected text'):
+    prediction = predict_hate_speech(selected_text)
+    st.write('Prediction:', prediction)
 
 # Texteingabe für eigene Vorhersage
 st.subheader('Enter your own Text in English')
