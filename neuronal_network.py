@@ -130,63 +130,69 @@ for i in df_test['sentiment'].values:
 
 #-------START NN-------
 
-
-epoch = 30 #Anzahl der Epochen
 correct = 0 #Anzahl korrekte Ergebnisse
 count = 0 #Anzahl Durchläufe pro Epoche bzw. Testgröße
+
+epoch = 30 #Anzahl der Epochen
 learnrate = 0.005
+batch_size = 50 #Wie groß ist eine Untergruppe des Test datensatzes
 
 for epoche in range(epoch):
     w_change=[0]*size
     b_change=[0]*size
+
+    for i in range(0, len(sentences), batch_size):
+        
+        batch = sentences[i:i + batch_size]
+        batch_labels = labels[i:i + batch_size]
+        
+        for sentence,label in zip(batch,batch_labels):
+
+            sentence.shape+=(1,)
+            label.shape+=(1,)
+
+            """
+            #foreward propagation
+            l=[0]*size
+            for i in range(1, size):
+                if i == 1:
+                    l[1] = forward(bias[0], weight[0], sentence)
+                else:
+                    l[i] = forward(bias[i-1], weight[i-1], l[i-1])
+            """
+            l = forward_propagation(weight=weight, bias=bias, input=sentence)
+
+            #Error-wert berechnen
+            err = 1/len(l[size-1]) * np.sum((l[size-1] - label)**2, axis=0)
+            correct += int(np.argmax(l[size-1]) == np.argmax(label))
+            count+=1
+            
+            #Backpropagation Start
+            
+            #Zwischenspeichern der Weights
+            w_final = [i for i in weight]
     
-    for sentence,label in zip(sentences,labels):
+            delta_l = [0]*size
+            for i in range (size-1, 0, -1):
+                if i == size-1:
+                    delta_l[i] = l[size-1] - label
+                else:
+                    #Derivative berechnen: Backpropagation-weights * Ableitung von Sigmoid
+                    delta_l[i] = np.transpose(w_final[i]) @ delta_l[i+1] * (l[i]*(1-l[i]))
+                if i == 1:
+                    w_change[i-1] += -learnrate* delta_l[i] @ np.transpose(sentence)
+                else:
+                    #Vorüberhende Speicherung der Weight-Änderungen in w_change bevor nach Epoche Durchschnitt genommen wird
+                    w_final[i-1] += -learnrate* delta_l[i] @ np.transpose(l[i-1])
+                    w_change[i-1] += -learnrate* delta_l[i] @ np.transpose(l[i-1])
 
-        sentence.shape+=(1,)
-        label.shape+=(1,)
-
-        """
-        #foreward propagation
-        l=[0]*size
-        for i in range(1, size):
-            if i == 1:
-                l[1] = forward(bias[0], weight[0], sentence)
-            else:
-                l[i] = forward(bias[i-1], weight[i-1], l[i-1])
-        """
-        l = forward_propagation(weight=weight, bias=bias, input=sentence)
-
-        #Error-wert berechnen
-        err = 1/len(l[size-1]) * np.sum((l[size-1] - label)**2, axis=0)
-        correct += int(np.argmax(l[size-1]) == np.argmax(label))
-        count+=1
-        
-        #Backpropagation Start
-        
-        #Zwischenspeichern der Weights
-        w_final = [i for i in weight]
- 
-        delta_l = [0]*size
-        for i in range (size-1, 0, -1):
-            if i == size-1:
-                delta_l[i] = l[size-1] - label
-            else:
-                #Derivative berechnen: Backpropagation-weights * Ableitung von Sigmoid
-                delta_l[i] = np.transpose(w_final[i]) @ delta_l[i+1] * (l[i]*(1-l[i]))
-            if i == 1:
-                w_change[i-1] += -learnrate* delta_l[i] @ np.transpose(sentence)
-            else:
-                #Vorüberhende Speicherung der Weight-Änderungen in w_change bevor nach Epoche Durchschnitt genommen wird
-                w_final[i-1] += -learnrate* delta_l[i] @ np.transpose(l[i-1])
-                w_change[i-1] += -learnrate* delta_l[i] @ np.transpose(l[i-1])
-
-            b_change[i-1] += -learnrate* delta_l[i]
+                b_change[i-1] += -learnrate* delta_l[i]
 
 
-    #Updaten der Weight/ Biases nach Abschluss einer Epoche: Durchschnitt nehmen
-    for i in range(size):
-        weight[i] += w_change[i] / count
-        bias[i] += b_change[i] / count
+        #Updaten der Weight/ Biases nach Abschluss einer Epoche: Durchschnitt nehmen
+        for i in range(size):
+            weight[i] += w_change[i] / count
+            bias[i] += b_change[i] / count
  
 
     #Ausgeben der Genauigkeit nach jeder Iteration    
