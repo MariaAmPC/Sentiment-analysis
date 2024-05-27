@@ -19,7 +19,7 @@ from sentence_transformers import SentenceTransformer
 
 #Größe des Netzwerkes festlegen (size = Anzahl der hiddenlayer + Input und Output)
 
-gr = [768,50,20,6]
+gr = [384,50,20,6]
 size = len(gr)
 
 #Weigths und Biases festlegen: Weights zufällig, Biases auf 0
@@ -77,7 +77,7 @@ class BertModelSingleton:
     @classmethod
     def get_instance(cls):
         if cls._instance is None:
-            cls._instance = SentenceTransformer('nreimers/albert-small-v2')
+            cls._instance = SentenceTransformer('nreimers/MiniLM-L6-H384-uncased')
         return cls._instance
 
 model = BertModelSingleton.get_instance()
