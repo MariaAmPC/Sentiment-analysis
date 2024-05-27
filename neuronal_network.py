@@ -82,9 +82,9 @@ class BertModelSingleton:
 
 model = BertModelSingleton.get_instance()
 sentences = model.encode(df_train["content"].tolist())
-sentence_test = model.encode(df_test["content"].tolist())
+#sentence_test = model.encode(df_test["content"].tolist())
 
-#TODO: LAbles einlesen besser gestalten
+#TODO: Lables einlesen besser gestalten
 
 #Labels einlesen
 labels=np.empty((0,6))
@@ -105,6 +105,7 @@ for i in df_train['sentiment'].values:
         print("ERROR" + i)
     labels = np.insert(labels, len(labels), newrow, axis=0)
 
+"""
 #LAbels für Test einlesen
 labels_test=np.empty((0,6))
 for i in df_test['sentiment'].values:
@@ -123,7 +124,7 @@ for i in df_test['sentiment'].values:
     else:
         print("ERROR" + i)
     labels_test = np.insert(labels_test, len(labels_test), newrow, axis=0)
-
+"""
 
 
 
@@ -192,8 +193,12 @@ for epoche in range(epoch):
     print(f"Acc: {round((correct/count)*100,2)} %")
     correct=0
     count=0
+
+"""
+#Testen des Modells
 x=test(sentence_test, labels_test)
-print("Tset: "+ x)
+print(f"Tset: {x}")
+"""
 
 #trainiertes Modell speichern
 dict={}
@@ -202,35 +207,3 @@ for i in range(size-1):
     dict[f'b{i}']=bias[i]
 np.savez('neuronal_network.npz', **dict)
 
-
-
-
-#-------TESTEN NN-------
-
-
-"""
-while True:
-    index = int(input("Enter a number (0 - 65597): "))
-    sentance = content[index]
-    print(sentance)
-
-    sentance.shape += (1,)
-    
-    # Forward propagation input -> hidden
-    h_pre = b_i_l1 + w_i_l1 @ img.reshape(784, 1)
-    h = 1 / (1 + np.exp(-h_pre))
-    # Forward propagation hidden -> output
-    o_pre = b_l1_o + w_l1_o @ h
-    o = 1 / (1 + np.exp(-o_pre))
-    
-    l=[0]*size
-    for i in range(1, size):
-        if i == 1:
-            l[1] = forward(bias[0],weight[0],img.reshape(784, 1))
-        else:
-            l[i] = forward(bias[i-1], weight[i-1], l[i-1])
-
-    plt.title(f"Subscribe if its a {l[size-1].argmax()} :)")
-    plt.show()
-
-    """
