@@ -34,8 +34,8 @@ for i in range(size-1):
 def sigmoid(value): 
     return 1/ (1 + np.exp(-value))
 
-def forward(bias, weight, x): 
-    pre= bias+ weight @ x
+def forward(bias, weight, layer): 
+    pre = bias + weight @ layer
     return(sigmoid(pre))
 
 def forward_propagation(bias, weight, input):
@@ -51,6 +51,8 @@ def test(sentence, label):
     correct = 0
     count = 0
     for sentence, label in zip(sentence, label):
+        sentence.shape+=(1,)
+        label.shape+=(1,)
         l = forward_propagation(bias=bias, weight=weight, input=sentence)
 
         correct += int(np.argmax(l[size-1]) == np.argmax(label))
@@ -67,8 +69,9 @@ df = df[df.sentiment.isin(emotions)]
 
 df_test, df_train = train_test_split(df , test_size=0.33, random_state=42)
 
-#df_train auf die hälfte der größe
+#df auf die hälfte der größe
 df_train, df_unused = train_test_split(df_train, test_size=0.5, random_state=42)
+df_test, df_unused = train_test_split(df_test, test_size=0.5, random_state=42)
 
 #BERT modell zum sätze einlesen
 class BertModelSingleton:
@@ -82,7 +85,7 @@ class BertModelSingleton:
 
 model = BertModelSingleton.get_instance()
 sentences = model.encode(df_train["content"].tolist())
-#sentence_test = model.encode(df_test["content"].tolist())
+sentence_test = model.encode(df_test["content"].tolist())
 
 #TODO: Lables einlesen besser gestalten
 
@@ -105,7 +108,7 @@ for i in df_train['sentiment'].values:
         print("ERROR" + i)
     labels = np.insert(labels, len(labels), newrow, axis=0)
 
-"""
+
 #LAbels für Test einlesen
 labels_test=np.empty((0,6))
 for i in df_test['sentiment'].values:
@@ -124,7 +127,7 @@ for i in df_test['sentiment'].values:
     else:
         print("ERROR" + i)
     labels_test = np.insert(labels_test, len(labels_test), newrow, axis=0)
-"""
+
 
 
 
@@ -142,7 +145,7 @@ for epoche in range(epoch):
     b_change=[0]*size
 
     for i in range(0, len(sentences), batch_size):
-        
+
         batch = sentences[i:i + batch_size]
         batch_labels = labels[i:i + batch_size]
         
@@ -160,7 +163,7 @@ for epoche in range(epoch):
                 else:
                     l[i] = forward(bias[i-1], weight[i-1], l[i-1])
             """
-            l = forward_propagation(weight=weight, bias=bias, input=sentence)
+            l = forward_propagation(bias=bias, weight=weight, input=sentence)
 
             #Error-wert berechnen
             err = 1/len(l[size-1]) * np.sum((l[size-1] - label)**2, axis=0)
@@ -200,11 +203,12 @@ for epoche in range(epoch):
     correct=0
     count=0
 
-"""
+
 #Testen des Modells
-x=test(sentence_test, labels_test)
-print(f"Tset: {x}")
-"""
+acc_test=test(sentence_test, labels_test)
+print("")
+print(f"Test: {acc_test} %")
+
 
 #trainiertes Modell speichern
 dict={}
