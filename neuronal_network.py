@@ -62,16 +62,28 @@ def test(sentence, label):
 
 
 #Daten einlesen
-df=pd.read_csv(r"https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/tweet_emotions.csv")
+df=pd.read_csv(r"https://raw.githubusercontent.com/MariaAmPC/Sentiment-analysis/main/tweet_emotions.csv")
 
 emotions = ["neutral", "worry", "happiness", "sadness", "love", "hate"]
 df = df[df.sentiment.isin(emotions)]
 
-df_test, df_train = train_test_split(df , test_size=0.33, random_state=42)
+
+target_count = df['sentiment'].value_counts()['sadness']
+balanced_df = pd.concat([
+    df[df['sentiment'] == 'worry'].sample(target_count, random_state=42),
+    df[df['sentiment'] == 'neutral'].sample(target_count, random_state=42),
+    df[df['sentiment'] == 'happiness'].sample(target_count, random_state=42),
+    df[df['sentiment'] == 'sadness'],
+    df[df['sentiment'] == 'love'],
+    df[df['sentiment'] == 'hate']
+])
+balanced_df = balanced_df.sample(frac=1, random_state=42).reset_index(drop=True)
+
+df_test, df_train = train_test_split(balanced_df , test_size=0.33, random_state=42)
 
 #df auf die hälfte der größe
-df_train, df_unused = train_test_split(df_train, test_size=0.5, random_state=42)
-df_test, df_unused = train_test_split(df_test, test_size=0.5, random_state=42)
+#df_train, df_unused = train_test_split(df_train, test_size=0.5, random_state=42)
+#df_test, df_unused = train_test_split(df_test, test_size=0.5, random_state=42)
 
 #BERT modell zum sätze einlesen
 class BertModelSingleton:
