@@ -1,4 +1,4 @@
-1. Introduction (samed)
+1. Introduction
    
    Today, social media plays a central role in the exchange of opinions and information. Sentiment analysis is becoming increasingly important. Companies, political actors and researchers use this technology to capture and analyse public sentiment and opinions in real time. 
    Our motivation in this project is to make this possible and to gain experience with neural networks.
@@ -15,7 +15,7 @@
   6. Conclusion
   7. bibliography
    
-2. Related Work (samed)    
+2. Related Work   
    
    The use of machine learning and neural networks for sentiment analysis has been investigated in several studies. Neethu and Rajasree present the different classification techniques used for sentiment analysis. These are Nave Bayes Classifier, SVM Classifier, Maximum Entropy Classifier and Ensemble Classifier, all of which perform similarly. Naive Bayes has better accuracy, but the other classifiers have better accuracy and recognition (Neethu & Rajasree, 2013). 
    Duyu Tang et al point out two main directions of sentiment classification: lexicon-based approach and corpus-based approach. Lexicon-based approaches use dictionaries with predefined sentiment values and integrate linguistic features such as negation and intensification to calculate the sentiment polarity of texts. Corpus-based methods, on the other hand, use machine learning with annotated data sets and various features, with the best results often being achieved by Support Vector Machines (SVM) with bag-of-words features (Duyu Tang et al., 2015).
@@ -23,7 +23,7 @@
 
 3. Methodology
    
-   3.1. General Methodology (luis)
+   3.1. General Methodology 
    
       To achieve our project goals, we followed a structured and collaborative research process. We began by defining specific, measurable goals for each phase of the project, such as implementing the neural network, importing and preprocessing datasets, and improving model accuracy. Each objective served as an intermediate milestone guiding our progress. 
       
@@ -31,7 +31,7 @@
 
       With a unified understanding, we transitioned to practical implementation, applying the gathered knowledge by coding in Python. This involved implementing the neural network, adding a language modell to interpret the given sentences, and fine-tuning the model to achieve higher accuracy. Throughout the implementation phase, we continuously evaluated our progress against the set objectives, making necessary adjustments and refinements based on feedback and results. For example, we decided to change the type of dataset we were using. We switched from a binary classification of hate speech to classifying different emotions in a sentence. The reason for this change was the relatively better performance of the neural network when it had more categories to distinguish between (6 instead of 2).
 
-   3.2. Data Understanding and Preparation (Marie) 
+   3.2. Data Understanding and Preparation
    
       In our use case, we aim to develop a classification algorithm capable of categorizing text-based data into various emotional categories. To achieve this, we require datasets that contain specific labels to facilitate the training and evaluation of our model. Our selected dataset consists of 120,000 rows and three columns: ['tweet_id', 'sentiment', 'content']. The data types are int64 for 'tweet_id' and object for 'sentiment' and 'content'. The 'content' column contains the tweets, while the 'sentiment' column holds the labels, which include categories such as empty, sadness, enthusiasm, neutral, worry, surprise, love, fun, hate, happiness, boredom, relief, and anger.
 
@@ -48,38 +48,46 @@
 
       For evaluation, we used a test dataset different from the training dataset to run the trained neural network and assess its accuracy. This final step ensured that our model generalized well to new, unseen data, allowing us to gauge its effectiveness in classifying emotions accurately.
 
-5. Results (marie)
+5. Results
+   - We have trained a neural network model specifically designed for tweet sentiment analysis. This model is capable of classifying the sentiment of tweets into categories.
+   - A labeled dataset of tweets was used for training the model. This dataset includes various tweets along with their corresponding sentiment labels.
+   - A user-friendly application where users can input text. The app processes this input through the trained model to predict the sentiment of the tweet.
+   - An API endpoint that takes text input and returns the sentiment prediction. This API is integrated with the app to provide real-time sentiment analysis.
+
+### Libraries and Tools Used
+
+1. Python
+2. Python librarys such as Pandas and Numy
+3. A BERT Transformer Model
+4.Streamlit for App Development
+
+### Concept of the App
+
+The app is designed to provide users with a simple and intuitive way to analyze the sentiment of tweets. Users can enter a tweet into a text box, the app sends the text to a server. The server processes the text through the trained neural network model and returns the predicted sentiment. This result is then displayed to the user on the app interface.
+
+### Results on Unseen Data
+
+By applying the trained models to unseen data (tweets that were not part of the training dataset), the following results have been observed:
+
+1. **Accuracy:**
+   - The model demonstrates a relativly low level of accuracy in predicting the sentiment of new tweets, effectively distinguishing between five Chategorys.
+
+2. **Real-time Performance:**
+   - The app provides real-time sentiment analysis, with predictions generated and displayed almost instantaneously after the user submits a tweet for analysis.
+
    
-   Describe what artifacts you have build
-   Describe the libraries and tools you use
-   Describe the concept of your app
-   Describe the results you achieve by applying your trained models on unseen data
-   Descriptive Language (no judgement, no discussion in this section -> just show what you built)
-   
-6. Discussion (maike)
+5. Discussion (maike)
 
    In our project we have developed an application capable of categorizing tweets to predict if people will react on the text with sadness, neutral, worried or if they hate it and so on. Our model was trained with on a dataset consisting of 120.000 tweets. 
 Despite the comprehensiveness of the dataset, it´s important to acknowledge that some relevant tweets may have been missed and initially, we faced limitations in terms of training resources and GPU availability in Colab.
 One of the challenges we encountered was the potential for inadvertent discrimination introduced by the algorithm. Biased language within the dataset could lead to inaccurate predictions. Therefore we took great care in selecting a dataset that was diverse and comprehensive, and had various examples of tweets to mitigate this issue.
 
+
    
-   Now its time to discuss your results/ artifacts/ app
-   Show the limitations : e.g. missing data, limited training ressources/ GPU availability in Colab, limitaitons of the app
-   Discuss your work from an ethics perspective:
-   Dangers of the application of your work (for example discrimination through ML models)
-   Transparency
-   Effects on Climate Change
-   Possible sources https://algorithmwatch.org/en/ Have a look at the "Automating Society Report"; https://ainowinstitute.org/ Have a look at this website and their
-   publications
-   Further Research: What could be next steps for other researchers (specific research questions)
-   
-8. Conclusion (Maike)
+8. Conclusion
 
    In conclusion, our project aimed to develop a high-quality application for sentiment analysis of tweets and this will be achieved through accurate data processing. 
 Moving forward, our application holds significant potential to assist users in understanding how their tweets will be received by others, thanks to high-quality predictions generated by our model. By prioritizing accuracy, our project contributes to enhancing the overall quality and utility of sentiment analysis tools in the realm of social media.
-
-    
-   Short summary of your findings and outlook
 
 10. bibliography
 
