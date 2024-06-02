@@ -1,14 +1,21 @@
 1. Introduction (samed)
    
-   Motivation
-   Define your research question
-   How is this document structured
+  Soziale Medien spielen heutzutage eine zentrale Rolle im Leben vieler Menschen. Dabei ist die Verbreitung von Hate speech zu einem großen Problem geworden. Laut einer Umfrage in Deutschland im Jahr 2022 zur Wahrnehmung von Hate Speech im Internet haben 78% der Befragten schon mal Hassrede im Internet gesehen. Bei 14-24 Jährigen sind es sogar 92% (Statista, 2024). Soziale Medien ermöglichen zwar freie Meinungsäußerungen, jedoch wird dies oft missbraucht, um Hass zu verbreiten. Diese negativen Inhalte können sowohl psychologische als auch soziale Schäden verursachen. Es ist praktisch unmöglich Hassreden manuell zu erkennen und zu beseitigen bzw. zu verhindern. Hierbei ist es notwendig, automatisierte Systeme zur Erkennung von Hate speech einzusetzen. 
+  Unsere Forschungsfrage lautet daher: Wie können maschinelle Lernmethoden effektiv eingesetzt werden, um Hate Speech in sozialen Medien zu erkennen und zu klassifizieren? 
+
+  Das Dokument ist wie folgt strukturiert:
+  1. Introduction
+  2. Related Work
+  3. Methodology
+  4. Results
+  5. Discussion
+  6. Conclusion
+  7. bibliography
    
-3. Related Work (samed) 
+3. Related Work (samed)    
    
-   What have others done in your area of work/ to answer similar questions?
-   Discussing existing work in the context of your work
-   
+   In mehreren Studien wurde der Einsatz von Machine Learning und Neuronalen Netzen zur Erkennung von Hassreden untersucht. Putra et al erreichen bei der Klassifizierung von Hate Speech in Hassrede oder Nicht-Hassrede mittels Convolutional Neuronal Network eine hohe Genauigkeit (accuracy) von ca. 95.89% (Putra et al., 2022). Hüsünbeyi et al heben hervor, dass das Bidirectional Encoder Representations (BERT) für kontextlastige Texte eine leistungsstarke Lösung darstellt. Sie erreichen zusammen mit der Hierarchical Attention Network (HAN) ebenfalls eine hohe Genauigkeit (Hüsünbeyi et al., 2022). Subramanian et al stellen die Herausforderungen bei der Erkennung von Hassreden und Stimmungsanalyse (sentiment analysis) dar. Zum einen sind die Nachrichten in sozialen Medien nicht immer strukturiert und teils schlecht geschrieben. Dies erschwert das Erkennen von Mustern in den Texten. Zudem können Hassreden subjektiv sein und vom Kontext abhängen, was die Erkennung von Hassreden erschwert (Subramanian et al., 2023).
+
 3. Methodology
    
    3.1. General Methodology (luis)
@@ -54,3 +61,18 @@
 6. Conclusion (Maike)
     
    Short summary of your findings and outlook
+
+7. bibliography
+
+
+   Hatespeech: Wahrnehmung nach Alter 2022. (2024). Statista. Abgerufen 2. Juni 2024, von https://de.statista.com/statistik/daten/studie/1365862/umfrage/umfrage-in-deutschland-zur-wahrnehmung-von-hate-speech-im-internet-nach-alter/
+
+   Hüsünbeyi, Z. M., Akar, D., & Özgür, A. (2022). Identifying Hate Speech Using Neural Networks and Discourse Analysis Techniques. LATERAISSE. https://www.semanticscholar.org/paper/Identifying-Hate-Speech-Using-Neural-Networks-and-H%C3%BCs%C3%BCnbeyi-Akar/4bb1247c0de893a014a3a983bcb5c8cdf2717065
+
+   Putra, B. P., Irawan, B., Setianingsih, C., Rahmadani, A., Imanda, F., & Fawwas, I. Z. (2022). Hate Speech Detection using Convolutional Neural Network Algorithm Based on Image. 2021 International Seminar on Machine Learning, Optimization, and Data Science (ISMODE), 207–212. https://doi.org/10.1109/ISMODE53584.2022.9742810
+
+   Subramanian, M., Easwaramoorthy Sathiskumar, V., Deepalakshmi, G., Cho, J., & Manikandan, G. (2023). A survey on hate speech detection and sentiment analysis using machine learning and deep learning models. Alexandria Engineering Journal, 80, 110–121. https://doi.org/10.1016/j.aej.2023.08.038
+
+
+
+
