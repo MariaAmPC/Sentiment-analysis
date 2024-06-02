@@ -1,7 +1,9 @@
 1. Introduction (samed)
    
-  Today, social media plays a central role in the exchange of opinions and information. Sentiment analysis is becoming increasingly important. Companies, political actors and researchers use this technology to capture and analyse public sentiment and opinions in real time. 
-  Against this background, the research question is: How can machine learning methods be used effectively to classify sentiment using sentiment analysis in social media?
+   Today, social media plays a central role in the exchange of opinions and information. Sentiment analysis is becoming increasingly important. Companies, political actors and researchers use this technology to capture and analyse public sentiment and opinions in real time. 
+   Our motivation in this project is to make this possible and to gain experience with neural networks.
+   Against this background, the research question is: How can machine learning methods be used effectively to classify sentiment using sentiment analysis in social media?
+
 
 
   The document is structured as follows:
