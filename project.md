@@ -28,8 +28,15 @@
    
       Introduce the dataset to the reader
       Describe structure and size of your dataset
-      Describe specialities
+
+      Structure and Size of the Dataset
+In our use case, we aim to develop a classification algorithm capable of categorizing text-based data into various emotional categories. To achieve this, we require datasets that contain specific labels to facilitate the training and evaluation of our model. Our selected dataset consists of 120,000 rows and three columns: ['tweet_id', 'sentiment', 'content']. The data types are int64 for 'tweet_id' and object for 'sentiment' and 'content'. The 'content' column contains the tweets, while the 'sentiment' column holds the labels, which include categories such as empty, sadness, enthusiasm, neutral, worry, surprise, love, fun, hate, happiness, boredom, relief, and anger.
+
+
       Describe how you prepare the dataset for your project
+As outlined, we focus on classifying five primary sentiment categories. To ensure a comprehensive data foundation, we selected the five most frequently represented labels and included the "hate" category due to its significant representation of emotion in tweets. Our analysis revealed an uneven distribution of data in the dataset. To ensure a more balanced distribution for model training, we limited the number of data points per sentiment to the level of the "sadness" category. This approach resulted in the following distribution:
+
+Although the "love" and "hate" categories remain underrepresented, we consciously opted for this trade-off to maintain a sufficient data volume for model training. This strategy helps optimize the balance between data diversity and volume, enhancing the model's robustness.
 
    
    3.3. Modeling and Evaluation (Luis)
@@ -38,7 +45,7 @@
       Describe how you train your models
       Describe how you evaluate your models/ which metrics you use
 
-4. Results (marie)
+5. Results (marie)
    
    Describe what artifacts you have build
    Describe the libraries and tools you use
@@ -46,7 +53,7 @@
    Describe the results you achieve by applying your trained models on unseen data
    Descriptive Language (no judgement, no discussion in this section -> just show what you built)
    
-5. Discussion (maike)
+6. Discussion (maike)
    
    Now its time to discuss your results/ artifacts/ app
    Show the limitations : e.g. missing data, limited training ressources/ GPU availability in Colab, limitaitons of the app
@@ -58,11 +65,11 @@
    publications
    Further Research: What could be next steps for other researchers (specific research questions)
    
-6. Conclusion (Maike)
+7. Conclusion (Maike)
     
    Short summary of your findings and outlook
 
-7. bibliography
+8. bibliography
 
 
    Hatespeech: Wahrnehmung nach Alter 2022. (2024). Statista. Abgerufen 2. Juni 2024, von https://de.statista.com/statistik/daten/studie/1365862/umfrage/umfrage-in-deutschland-zur-wahrnehmung-von-hate-speech-im-internet-nach-alter/
