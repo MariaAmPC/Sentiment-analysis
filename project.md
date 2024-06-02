@@ -12,7 +12,7 @@
   6. Conclusion
   7. bibliography
    
-3. Related Work (samed)    
+2. Related Work (samed)    
    
    In mehreren Studien wurde der Einsatz von Machine Learning und Neuronalen Netzen zur Erkennung von Hassreden untersucht. Putra et al erreichen bei der Klassifizierung von Hate Speech in Hassrede oder Nicht-Hassrede mittels Convolutional Neuronal Network eine hohe Genauigkeit (accuracy) von ca. 95.89% (Putra et al., 2022). Hüsünbeyi et al heben hervor, dass das Bidirectional Encoder Representations (BERT) für kontextlastige Texte eine leistungsstarke Lösung darstellt. Sie erreichen zusammen mit der Hierarchical Attention Network (HAN) ebenfalls eine hohe Genauigkeit (Hüsünbeyi et al., 2022). Subramanian et al stellen die Herausforderungen bei der Erkennung von Hassreden und Stimmungsanalyse (sentiment analysis) dar. Zum einen sind die Nachrichten in sozialen Medien nicht immer strukturiert und teils schlecht geschrieben. Dies erschwert das Erkennen von Mustern in den Texten. Zudem können Hassreden subjektiv sein und vom Kontext abhängen, was die Erkennung von Hassreden erschwert (Subramanian et al., 2023).
 
