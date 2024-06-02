@@ -23,24 +23,28 @@
    
    3.1. General Methodology (luis)
    
-      How did you proceed to achieve your project goals?
-      Describe which steps you have undertaken
-      Aim: Others should understand your research process
+      To achieve our project goals, we followed a structured and collaborative research process. We began by defining specific, measurable goals for each phase of the project, such as implementing the neural network, importing and preprocessing datasets, and improving model accuracy. Each objective served as an intermediate milestone guiding our progress. 
+      
+      Once objectives were set, team members independently gathered relevant external materials, including instructional YouTube videos, research papers, and relevant documentation. This equipped everyone with a solid foundation of knowledge related to the task at hand. After the initial research phase, we convened to share our findings, compiling information and addressing comprehension issues collectively. This collaborative knowledge-sharing ensured everyone was on the same page. 
+
+      With a unified understanding, we transitioned to practical implementation, applying the gathered knowledge by coding in Python. This involved implementing the neural network, adding a language modell to interpret the given sentences, and fine-tuning the model to achieve higher accuracy. Throughout the implementation phase, we continuously evaluated our progress against the set objectives, making necessary adjustments and refinements based on feedback and results. For example, we decided to change the type of dataset we were using. We switched from a binary classification of hate speech to classifying different emotions in a sentence. The reason for this change was the relatively better performance of the neural network when it had more categories to distinguish between (6 instead of 2).
 
    3.2. Data Understanding and Preparation (Marie) 
    
-In our use case, we aim to develop a classification algorithm capable of categorizing text-based data into various emotional categories. To achieve this, we require datasets that contain specific labels to facilitate the training and evaluation of our model. Our selected dataset consists of 120,000 rows and three columns: ['tweet_id', 'sentiment', 'content']. The data types are int64 for 'tweet_id' and object for 'sentiment' and 'content'. The 'content' column contains the tweets, while the 'sentiment' column holds the labels, which include categories such as empty, sadness, enthusiasm, neutral, worry, surprise, love, fun, hate, happiness, boredom, relief, and anger.
+      In our use case, we aim to develop a classification algorithm capable of categorizing text-based data into various emotional categories. To achieve this, we require datasets that contain specific labels to facilitate the training and evaluation of our model. Our selected dataset consists of 120,000 rows and three columns: ['tweet_id', 'sentiment', 'content']. The data types are int64 for 'tweet_id' and object for 'sentiment' and 'content'. The 'content' column contains the tweets, while the 'sentiment' column holds the labels, which include categories such as empty, sadness, enthusiasm, neutral, worry, surprise, love, fun, hate, happiness, boredom, relief, and anger.
 
-As outlined, we focus on classifying five primary sentiment categories. To ensure a comprehensive data foundation, we selected the five most frequently represented labels and included the "hate" category due to its significant representation of emotion in tweets. Our analysis revealed an uneven distribution of data in the dataset. To ensure a more balanced distribution for model training, we limited the number of data points per sentiment to the level of the "sadness" category. This approach resulted in the following distribution:
+      As outlined, we focus on classifying five primary sentiment categories. To ensure a comprehensive data foundation, we selected the five most frequently represented labels and included the "hate" category due to its significant representation of emotion in tweets. Our analysis revealed an uneven distribution of data in the dataset. To ensure a more balanced distribution for model training, we limited the number of data points per sentiment to the level of the "sadness" category. This approach resulted in the following distribution:
 
-Although the "love" and "hate" categories remain underrepresented, we consciously opted for this trade-off to maintain a sufficient data volume for model training. This strategy helps optimize the balance between data diversity and volume, enhancing the model's robustness.
+      Although the "love" and "hate" categories remain underrepresented, we consciously opted for this trade-off to maintain a sufficient data volume for model training. This strategy helps optimize the balance between data diversity and volume, enhancing the model's robustness.
 
    
    3.3. Modeling and Evaluation (Luis)
    
-      Describe the model architecture(s) you selected
-      Describe how you train your models
-      Describe how you evaluate your models/ which metrics you use
+      For our project, we decided to create and train a neural network from scratch rather than using a pre-trained model. Our model architecture consists of several custom-programmed layers and neurons. Specifically, the network features 384 input neurons, representing the vector for the input sentence, and 6 output neurons, each corresponding to a different emotion category. To convert the input sentences into vectors, we implemented BERT, a language model that transforms sentences into corresponding vectors that can be processed by the neural network. Different sentences correspond to different vectors based on their meanings.
+
+      To train the model, we initialized the weights for the connections between the layers with random values. During training, we improved these weights through multiple iterations. The process involves matrix multiplication to pass the input vector through the various layers, resulting in an emotion classification. We then compared the network's output to the pre-labeled emotion, calculated an error value, and used backpropagation to adjust the weights based on this error. This process was repeated multiple times with the same dataset to optimize the network's performance.
+
+      For evaluation, we used a test dataset different from the training dataset to run the trained neural network and assess its accuracy. This final step ensured that our model generalized well to new, unseen data, allowing us to gauge its effectiveness in classifying emotions accurately.
 
 5. Results (marie)
    
