@@ -107,7 +107,7 @@ class BertModelSingleton:
     @classmethod
     def get_instance(cls):
         if cls._instance is None:
-            cls._instance = SentenceTransformer('nreimers/MiniLM-L6-H384-uncased')
+            cls._instance = SentenceTransformer('all-MiniLM-L6-v2')
         return cls._instance
 
 model = BertModelSingleton.get_instance()
