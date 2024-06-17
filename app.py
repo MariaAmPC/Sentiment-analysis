@@ -11,7 +11,7 @@ import nltk
 nltk.download('stopwords')
 
 stop_words = set(stopwords.words('english'))
-transformer = 'all-MiniLM-L6-v2'
+transformer = 'sentence-transformers/stsb-bert-base'
 
 # Funktion zur Textbereinigung
 def clean_text(text):
