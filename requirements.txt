@@ -4,3 +4,4 @@ sklearn-model
 numpy
 pandas
 matplotlib
+nltk
