@@ -17,7 +17,7 @@ from sentence_transformers import SentenceTransformer
 
 gr = [768,50,20,6]
 size = len(gr)
-transformer = 'sentence-transformers/stsb-bert-base'
+transformer = 'bert-base-uncased'
 
 #Weigths und Biases festlegen: Weights zufällig, Biases auf 0
 weight=[0]*size
