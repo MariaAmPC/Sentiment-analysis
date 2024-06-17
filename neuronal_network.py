@@ -15,9 +15,9 @@ from sentence_transformers import SentenceTransformer
 
 #Größe des Netzwerkes festlegen (size = Anzahl der hiddenlayer + Input und Output)
 
-gr = [768,50,20,6]
+gr = [384,50,20,6]
 size = len(gr)
-transformer = 'bert-base-uncased'
+transformer = 'nreimers/albert-small-v2'
 
 #Weigths und Biases festlegen: Weights zufällig, Biases auf 0
 weight=[0]*size
