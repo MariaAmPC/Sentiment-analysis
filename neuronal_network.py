@@ -22,6 +22,7 @@ from sentence_transformers import SentenceTransformer
 
 gr = [384,50,20,6]
 size = len(gr)
+transformer = 'all-MiniLM-L6-v2'
 
 #Weigths und Biases festlegen: Weights zufällig, Biases auf 0
 weight=[0]*size
@@ -107,7 +108,7 @@ class BertModelSingleton:
     @classmethod
     def get_instance(cls):
         if cls._instance is None:
-            cls._instance = SentenceTransformer('all-MiniLM-L6-v2')
+            cls._instance = SentenceTransformer(transformer)
         return cls._instance
 
 model = BertModelSingleton.get_instance()
