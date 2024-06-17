@@ -3,3 +3,4 @@ sentence-transformers
 sklearn-model
 numpy
 pandas
+matplotlib.pyplot
