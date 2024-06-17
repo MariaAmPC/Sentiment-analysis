@@ -11,7 +11,7 @@ import nltk
 nltk.download('stopwords')
 
 stop_words = set(stopwords.words('english'))
-transformer = 'bert-base-uncased'
+transformer = 'nreimers/albert-small-v2'
 
 # Funktion zur Textbereinigung
 def clean_text(text):
