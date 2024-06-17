@@ -11,7 +11,7 @@ import nltk
 nltk.download('stopwords')
 
 stop_words = set(stopwords.words('english'))
-transformer = 'sentence-transformers/stsb-bert-base'
+transformer = 'bert-base-uncased'
 
 # Funktion zur Textbereinigung
 def clean_text(text):
