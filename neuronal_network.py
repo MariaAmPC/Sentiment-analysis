@@ -1,7 +1,5 @@
 import numpy as np
 import pandas as pd
-#import pathlib
-#import requests
 from io import BytesIO
 import matplotlib.pyplot as plt
 import nltk
@@ -10,11 +8,8 @@ from nltk.corpus import stopwords
 from gensim.models import KeyedVectors
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
-#from collections import Counter
-#import functools
 from sentence_transformers import SentenceTransformer
-#import joblib
-#import os
+
 
 
 
