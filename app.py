@@ -11,6 +11,7 @@ import nltk
 nltk.download('stopwords')
 
 stop_words = set(stopwords.words('english'))
+transformer = 'all-MiniLM-L6-v2'
 
 # Funktion zur Textbereinigung
 def clean_text(text):
@@ -65,7 +66,7 @@ loaded_model = np.load('neuronal_network.npz')
 size = int(len(loaded_model)/2)+1
 weight = [loaded_model[f'w{i}'] for i in range(size-1)]
 bias = [loaded_model[f'b{i}'] for i in range(size-1)]
-bert_model = SentenceTransformer('nreimers/MiniLM-L6-H384-uncased')
+bert_model = SentenceTransformer(transformer)
 
 emotions = ["neutral", "worry", "happiness", "sadness", "love", "hate"]
 
