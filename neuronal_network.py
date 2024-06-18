@@ -17,7 +17,7 @@ from sentence_transformers import SentenceTransformer
 
 gr = [384,50,20,6]
 size = len(gr)
-transformer = 'nreimers/albert-small-v2'
+transformer = 'nreimers/MiniLM-L6-H384-uncased'
 
 #Weigths und Biases festlegen: Weights zufällig, Biases auf 0
 weight=[0]*size
