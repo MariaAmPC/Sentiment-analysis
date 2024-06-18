@@ -11,7 +11,7 @@ import nltk
 nltk.download('stopwords')
 
 stop_words = set(stopwords.words('english'))
-transformer = 'nreimers/albert-small-v2'
+transformer = 'nreimers/MiniLM-L6-H384-uncased'
 
 # Funktion zur Textbereinigung
 def clean_text(text):
