@@ -15,9 +15,9 @@ from sentence_transformers import SentenceTransformer
 
 #Größe des Netzwerkes festlegen (size = Anzahl der hiddenlayer + Input und Output)
 
-gr = [384,50,20,6]
+gr = [768,50,20,6]
 size = len(gr)
-transformer = 'nreimers/MiniLM-L6-H384-uncased'
+transformer = 'nreimers/albert-small-v2'
 
 #Weigths und Biases festlegen: Weights zufällig, Biases auf 0
 weight=[0]*size
@@ -215,9 +215,9 @@ def traindata(weights, biases, epoch, learnrate, batch_size):
 correct = 0 #Anzahl korrekte Ergebnisse
 count = 0 #Anzahl Durchläufe pro Epoche bzw. Testgröße
 
-epoch = 30 #Anzahl der Epochen
+epoch = 50 #Anzahl der Epochen
 learnrate = 0.005
-batch_size = 50 #Wie groß ist eine Untergruppe des Testdatensatzes
+batch_size = 30 #Wie groß ist eine Untergruppe des Testdatensatzes
 
 for epoche in range(epoch):
     w_change=[0]*size
