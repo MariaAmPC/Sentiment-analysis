@@ -92,9 +92,6 @@ df_vali, df_train = train_test_split(df_train , test_size=0.25, random_state=42)
 #df_train['content'] = df_train['content'].apply(remove_stopwords)
 #df_test['content'] = df_test['content'].apply(remove_stopwords)
 
-#df auf die hälfte der größe
-#df_train, df_unused = train_test_split(df_train, test_size=0.5, random_state=42)
-#df_test, df_unused = train_test_split(df_test, test_size=0.5, random_state=42)
 
 #BERT modell zum sätze einlesen
 class BertModelSingleton:
@@ -110,7 +107,6 @@ model = BertModelSingleton.get_instance()
 sentences = model.encode(df_train["content"].tolist())
 sentence_test = model.encode(df_test["content"].tolist())
 
-#TODO: Lables einlesen besser gestalten
 
 #Labels einlesen
 labels=np.empty((0,6))
@@ -156,66 +152,10 @@ for i in df_test['sentiment'].values:
 
 #-------START NN-------
 
-def traindata(weights, biases, epoch, learnrate, batch_size):
-    for epoche in range(epoch):
-        w_change=[0]*size
-        b_change=[0]*size
-
-        for i in range(0, len(sentences), batch_size):
-
-            batch = sentences[i:i + batch_size]
-            batch_labels = labels[i:i + batch_size]
-            
-            for input,label in zip(batch,batch_labels):
-
-                input.shape+=(1,)
-                label.shape+=(1,)
-
-                l = forward_propagation(bias=biases, weight=weights, input=input)
-
-                #Error-wert berechnen
-                err = 1/len(l[size-1]) * np.sum((l[size-1] - label)**2, axis=0)
-                correct += int(np.argmax(l[size-1]) == np.argmax(label))
-                count+=1
-                
-                #Backpropagation Start
-                
-                #Zwischenspeichern der Weights
-                w_final = [i for i in weights]
-        
-                delta_l = [0]*size
-                for i in range (size-1, 0, -1):
-                    if i == size-1:
-                        delta_l[i] = l[size-1] - label
-                    else:
-                        #Derivative berechnen: Backpropagation-weights * Ableitung von Sigmoid
-                        delta_l[i] = np.transpose(w_final[i]) @ delta_l[i+1] * (l[i]*(1-l[i]))
-                    if i == 1:
-                        w_change[i-1] += -learnrate* delta_l[i] @ np.transpose(input)
-                    else:
-                        #Vorüberhende Speicherung der Weight-Änderungen in w_change bevor nach Epoche Durchschnitt genommen wird
-                        w_final[i-1] += -learnrate* delta_l[i] @ np.transpose(l[i-1])
-                        w_change[i-1] += -learnrate* delta_l[i] @ np.transpose(l[i-1])
-
-                    b_change[i-1] += -learnrate* delta_l[i]
-
-
-            #Updaten der Weight/ Biases nach Abschluss einer Epoche: Durchschnitt nehmen
-            for i in range(size):
-                weights[i] += w_change[i] / count
-                biases[i] += b_change[i] / count
-
-        #Ausgeben der Genauigkeit nach jeder Iteration 
-        correct=0
-        count=0
-
-    accuracy = round((correct/count)*100,2)
-    return accuracy, weights, biases
-
 correct = 0 #Anzahl korrekte Ergebnisse
 count = 0 #Anzahl Durchläufe pro Epoche bzw. Testgröße
 
-epoch = 50 #Anzahl der Epochen
+epoch = 40 #Anzahl der Epochen
 learnrate = 0.005
 batch_size = 30 #Wie groß ist eine Untergruppe des Testdatensatzes
 
