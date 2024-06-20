@@ -13,6 +13,14 @@ nltk.download('stopwords')
 stop_words = set(stopwords.words('english'))
 transformer = 'nreimers/albert-small-v2'
 
+# Load custom CSS
+def load_css(css_file_path):
+    with open(css_file_path) as f:
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+
+# Load the CSS file
+load_css('style.css')
+
 # Funktion zur Textbereinigung
 def clean_text(text):
     text = re.sub(r'http\S+', '', text)  # URLs entfernen
