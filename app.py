@@ -105,14 +105,14 @@ st.title('Tweet Sentiment Analysis')
 
 # Sidebar
 st.sidebar.header('Navigation')
-selected_option = st.sidebar.radio('Choose an action', ['Predict from Dataset', 'Enter Custom Text', 'Dataset'])
+selected_option = st.sidebar.radio('Choose an action', ['Classify from Dataset', 'Enter Custom Text', 'Dataset'])
 
-if selected_option == 'Predict from Dataset':
+if selected_option == 'Classify from Dataset':
     df = pd.read_csv("https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/tweet_emotions.csv")
     df = df[df.sentiment.isin(emotions)]
     st.subheader('Select a Text from the Dataset')
     selected_text = st.selectbox('Select text: here we classify between ["neutral", "worry", "happiness", "sadness", "love", "hate"] ', df['content'])
-    if st.button('Predict sentiment for selected text'):
+    if st.button('Classify sentiment for selected text'):
         prediction = predict_hate_speech(selected_text)
         st.write('Prediction:', prediction)
         
@@ -121,7 +121,7 @@ if selected_option == 'Enter Custom Text':
     user_text = st.text_area('Enter text: here we classify between ["neutral", "worry", "happiness", "sadness", "love", "hate"]')
     
     if user_text.strip() == '':
-        if st.button('Predicting the Sentiment'):
+        if st.button('Classify sentiment'):
             st.error('Error: Please enter some text before predicting the sentiment.')
     elif st.button('Predicting the Sentiment'):
         prediction = predict_hate_speech(user_text)
