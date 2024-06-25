@@ -114,7 +114,7 @@ if selected_option == 'Classify from Dataset':
     selected_text = st.selectbox('Select text: here we classify between ["neutral", "worry", "happiness", "sadness", "love", "hate"] ', df['content'])
     if st.button('Classify sentiment for selected text'):
         prediction = predict_hate_speech(selected_text)
-        st.write('Prediction:', prediction)
+        st.write('Sentiment:', prediction)
         
 if selected_option == 'Enter Custom Text':
     st.subheader('Enter your own Text in English')
@@ -122,10 +122,10 @@ if selected_option == 'Enter Custom Text':
     
     if user_text.strip() == '':
         if st.button('Classify sentiment'):
-            st.error('Error: Please enter some text before predicting the sentiment.')
-    elif st.button('Predicting the Sentiment'):
+            st.error('Error: Please enter some text before classifying the sentiment.')
+    elif st.button('Classify sentiment'):
         prediction = predict_hate_speech(user_text)
-        st.write('Prediction:', prediction)
+        st.write('Sentiment:', prediction)
 
 elif selected_option == 'Dataset':
     df = pd.read_csv("https://raw.githubusercontent.com/MariaAmPC/hate-speach/main/tweet_emotions.csv")
