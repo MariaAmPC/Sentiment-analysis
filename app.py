@@ -13,15 +13,14 @@ nltk.download('stopwords')
 stop_words = set(stopwords.words('english'))
 transformer = 'nreimers/albert-small-v2'
 
-# Load custom CSS
+# CSS laden
 def load_css(css_file_path):
     with open(css_file_path) as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
-# Load the CSS file
 load_css('style.css')
 
-# Funktion zur Textbereinigung
+# Textbereinigung
 def clean_text(text):
     text = re.sub(r'http\S+', '', text)  # URLs entfernen
     text = re.sub(r'[^a-zA-Z\s]', '', text)  # Nicht-Alphabetische Zeichen entfernen
@@ -30,7 +29,7 @@ def clean_text(text):
     text = [word for word in text if word not in stop_words]  # Stopwörter entfernen
     return text
 
-# Funktion zur Wortfrequenzanalyse
+# Wortfrequenzanalyse
 def get_top_n_words(corpus, n=None):
     counter = Counter()
     for text in corpus:
