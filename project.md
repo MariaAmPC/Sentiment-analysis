@@ -19,9 +19,10 @@ zu unserem Ausfürlichen Bericht unseres Vorgehens: [Report](Report_Team_3.pdf)
    
 2. Related Work   
    
-   The use of machine learning and neural networks for sentiment analysis has been investigated in several studies. Neethu and Rajasree present the different classification techniques used for sentiment analysis. These are Nave Bayes Classifier, SVM Classifier, Maximum Entropy Classifier and Ensemble Classifier, all of which perform similarly. Naive Bayes has better accuracy, but the other classifiers have better accuracy and recognition (Neethu & Rajasree, 2013). 
-   Duyu Tang et al point out two main directions of sentiment classification: lexicon-based approach and corpus-based approach. Lexicon-based approaches use dictionaries with predefined sentiment values and integrate linguistic features such as negation and intensification to calculate the sentiment polarity of texts. Corpus-based methods, on the other hand, use machine learning with annotated data sets and various features, with the best results often being achieved by Support Vector Machines (SVM) with bag-of-words features (Duyu Tang et al., 2015).
+   There are three categories of machine learning: supervised learning, unsupervised learning and reinforcement learning. In supervised learning, we know the input and output, whereby the aim is to obtain the desired output based on the input. In contrast, the inputs and outputs are unknown in unsupervised learning. In reinforcement learning, information is collected through interaction with the environment, without a labelled data set (Jain et al., 2021).
+   Sentiment analysis can be used, among other things, to identify opinions and sentiment about a product. Yadav et al compare different classifiers in order to assign tweets regarding certain products to the respective sentiment. This helps companies to plan the future of a product accordingly (Yadav et al., 2020).
    Wankhade et al presented the challenges of sentiment analysis. Dealing with ambiguous situations and irony is a central difficulty in sentiment analysis. It is a challenge for a machine to understand cultural allusions. In addition, performance in sentiment analysis can be influenced by grammatical or spelling errors in the text (Wankhade et al., 2022).
+
 
 3. Methodology
    
@@ -95,11 +96,11 @@ Moving forward, our application holds significant potential to assist users in u
 10. bibliography
 
 
-   Duyu Tang, Bing Quin, & Ting Liu. (o. J.). Deep learning for sentiment analysis: Successful approaches and future challenges—Tang—2015—WIREs Data Mining and Knowledge Discovery—Wiley Online Library. Abgerufen 2. Juni 2024, von https://wires.onlinelibrary.wiley.com/doi/10.1002/widm.1171
-
-   Neethu, M. S., & Rajasree, R. (2013). Sentiment analysis in twitter using machine learning techniques. 2013 Fourth International Conference on Computing, Communications and Networking Technologies (ICCCNT), 1–5. https://doi.org/10.1109/ICCCNT.2013.6726818
+   Jain, P. K., Pamula, R., & Srivastava, G. (2021). A systematic literature review on machine learning applications for consumer sentiment analysis using online reviews. Computer Science Review, 41, 100413. https://doi.org/10.1016/j.cosrev.2021.100413
 
    Wankhade, M., Rao, A. C. S., & Kulkarni, C. (2022). A survey on sentiment analysis methods, applications, and challenges. Artificial Intelligence Review, 55(7), 5731–5780. https://doi.org/10.1007/s10462-022-10144-1
+   
+   Yadav, N., Kudale, O., Gupta, S., Rao, A., & Shitole, A. (2020). Twitter Sentiment Analysis Using Machine Learning For Product Evaluation. 2020 International Conference on Inventive Computation Technologies (ICICT), 181–185. https://doi.org/10.1109/ICICT48043.2020.9112381
 
 
 
