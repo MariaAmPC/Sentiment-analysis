@@ -1,0 +1,11 @@
+.stButton button {
+    background-color: #4CAF50;
+    color: white;
+    transition: background-color 0.3s ease, color 0.3s ease; 
+    border: none; 
+}
+
+.stButton button:hover {
+    background-color: #45a049; 
+    color: white; 
+}

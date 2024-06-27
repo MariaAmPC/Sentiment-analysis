@@ -1,3 +1,5 @@
+zu unserem Ausfürlichen Bericht unseres Vorgehens: [Report](Report_Team_3.pdf)
+
 1. Introduction
    
    Today, social media plays a central role in the exchange of opinions and information. Sentiment analysis is becoming increasingly important. Companies, political actors and researchers use this technology to capture and analyse public sentiment and opinions in real time. 
@@ -40,7 +42,7 @@
       Although the "love" and "hate" categories remain underrepresented, we consciously opted for this trade-off to maintain a sufficient data volume for model training. This strategy helps optimize the balance between data diversity and volume, enhancing the model's robustness.
 
    
-   3.3. Modeling and Evaluation (Luis)
+   3.3. Modeling and Evaluation 
    
       For our project, we decided to create and train a neural network from scratch rather than using a pre-trained model. Our model architecture consists of several custom-programmed layers and neurons. Specifically, the network features 384 input neurons, representing the vector for the input sentence, and 6 output neurons, each corresponding to a different emotion category. To convert the input sentences into vectors, we implemented BERT, a language model that transforms sentences into corresponding vectors that can be processed by the neural network. Different sentences correspond to different vectors based on their meanings.
 
@@ -76,7 +78,7 @@ By applying the trained models to unseen data (tweets that were not part of the 
    - The app provides real-time sentiment analysis, with predictions generated and displayed almost instantaneously after the user submits a tweet for analysis.
 
    
-5. Discussion (maike)
+5. Discussion
 
    In our project we have developed an application capable of categorizing tweets to predict if people will react on the text with sadness, neutral, worried or if they hate it and so on. Our model was trained with on a dataset consisting of 120.000 tweets. 
 Despite the comprehensiveness of the dataset, it´s important to acknowledge that some relevant tweets may have been missed and initially, we faced limitations in terms of training resources and GPU availability in Colab.
