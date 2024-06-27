@@ -20,7 +20,9 @@ zu unserem Ausfürlichen Bericht unseres Vorgehens: [Report](Report_Team_3.pdf)
 2. Related Work   
    
    There are three categories of machine learning: supervised learning, unsupervised learning and reinforcement learning. In supervised learning, we know the input and output, whereby the aim is to obtain the desired output based on the input. In contrast, the inputs and outputs are unknown in unsupervised learning. In reinforcement learning, information is collected through interaction with the environment, without a labelled data set (Jain et al., 2021).
+
    Sentiment analysis can be used, among other things, to identify opinions and sentiment about a product. Yadav et al compare different classifiers in order to assign tweets regarding certain products to the respective sentiment. This helps companies to plan the future of a product accordingly (Yadav et al., 2020).
+   
    Wankhade et al presented the challenges of sentiment analysis. Dealing with ambiguous situations and irony is a central difficulty in sentiment analysis. It is a challenge for a machine to understand cultural allusions. In addition, performance in sentiment analysis can be influenced by grammatical or spelling errors in the text (Wankhade et al., 2022).
 
 
